@@ -1,0 +1,21 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  uid: 1
+  hosting: MyString
+  job_area: MyString
+  job_role: MyString
+  infopoint: MyString
+  session_key: MyString
+  session_expires: MyString
+  last_access: 2009-08-31 11:59:02
+
+two:
+  uid: 1
+  hosting: MyString
+  job_area: MyString
+  job_role: MyString
+  infopoint: MyString
+  session_key: MyString
+  session_expires: MyString
+  last_access: 2009-08-31 11:59:02

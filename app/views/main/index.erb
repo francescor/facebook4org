@@ -1,0 +1,270 @@
+<div style = "text-align:right;" >
+  <fb:bookmark></fb:bookmark>
+</div>
+<h2> Home </h2>
+
+
+<fb:prompt-permission perms="offline_access" next_fbjs="permission_gohome()">
+  <!-- we need this in case user REMOVE permission -->
+    <script type="text/javascript"> 
+    function permission_gohome() 
+    { 
+    document.setLocation('<%= home_url -%>');
+    } 
+    </script>
+    <br />
+    <div  style = "border:1px solid #BDC7D8;padding:4px; width: 300px; background:#fff9d7; float:right;">
+      <small>Note:<br />
+        The <%= APPLICATION_NAME_WITH_STYLE %> needs your permission to remember you to speed up the process of match-making, and
+        to create a significant experience for other <%= APPLICATION_NAME_WITH_STYLE %> users when they asking about you. <br />
+        <br /><strong>Click in this box</strong> to allow this permission.<br />
+      </small>
+    </div>
+    <div style ="clear:both">
+     <br />
+     <br />
+    </div>
+</fb:prompt-permission>
+
+
+<br />
+
+<div class="menu" style="width: 510px; height: 500px;float:left;clear:both" >
+  <h3> Welcome <%= fb_name(@current_user.uid, :firstnameonly => true, :useyou => false, :linked => false) %> to the <%= APPLICATION_NAME_WITH_STYLE %> </h3>
+  <h3>  Here are some links:</h3>
+  <ul>
+  <li>
+    <%= link_to 'Search for people', search_url(:output => 'list', :reset => 'all', :show_quick_search => 'yes', :template => 'basic' ) %>
+   <div class="descrip">Look up profiles of people wanting to go to organisations.</div>
+  </li>
+
+  <li>
+    <%= link_to 'Search for organisations', search_organisations_url(:template => 'basic', :output => 'list', :clear_session => true) %>
+   <div class="descrip">View details of all registered organisations.</div>
+  </li>
+
+  <li>
+    <%= link_to 'Offers by Organisations', wanted_url(:template => 'basic', :output => 'list', :clear_session => true) %>
+    <div class="descrip"> Are organisations searching for people like you?
+    </div>
+  </li>
+
+
+  <li>
+    <%= link_to 'Update your profile', settings_url %>
+   <div class="descrip">Check & update the information other <%= APPLICATION_NAME_WITH_STYLE %> users see about you.</div>
+  </li>
+
+
+  <li>
+    <%= link_to 'Write an offer', new_organisation_post_url %>
+    <div class="descrip">Write an offer for an exchange, for volunteers, interns or workers.</div>
+  </li>
+
+  <li>
+    <%= link_to 'Write a message on the Message Board',   :controller => 'main', :action => 'message_board'  %>
+    <div class="descrip">This is place for discussion between <%= MAIN_ORG_SHORT_NAME %> people.</div>
+  </li>
+
+  <li>
+    <%= link_to 'Invite friends', new_invitation_url %>
+   <div class="descrip">Access to <%= APPLICATION_NAME_WITH_STYLE %> is not public,
+                        but your  <%= MAIN_ORG_SHORT_NAME %> friends can use it.
+                        <%= link_to 'Invite', new_invitation_url %> them to join the <%= APPLICATION_NAME_WITH_STYLE %> now!</div>
+  </li>
+
+  <li>
+    <%= link_to 'Background', 'http://changingroom.teh.net' %>
+   <div class="descrip">What is this project all about? Find out in a single <%= link_to 'click','http://changingroom.teh.net' %>.</div>
+  </li>
+
+  <br />
+  <li>
+   <%= link_to 'Tip', :action => 'add_tab_example' %>
+   <div class="descrip">Get a quick link to all <%= APPLICATION_NAME_WITH_STYLE %> updates in your profile: <%= link_to 'see how to', :action => 'add_tab_example' %>.</div>
+  </li>
+
+  </ul>
+</div>
+
+
+<div  style = "text-align:center;border:0px solid #BDC7D8;padding:5px; width: 205px;float:right; height: 120px; ">
+
+
+
+
+   <%= APPLICATION_NAME_WITH_STYLE %> is part of the <br />
+   <br />
+   <%= link_to (image_tag 'toolkit_logo.jpg', :width => '130', :alt => ''), 'http://changingroom.teh.net' %><br />
+   <br />
+   <small>
+     <%= link_to 'View other tools', 'http://changingroom.teh.net' %><br />
+   </small>
+  
+  
+</div>
+
+<div  style = "text-align:center;border:0px solid #BDC7D8;padding:5px; width: 205px;float:right; height: 10px; ">
+</div>
+
+<div  style = "text-align:center;border:1px solid #BDC7D8;padding:5px; width: 205px;float:right; height: 350px; background:#F7F7F7;">
+
+  Latest People who joined<br />
+  <br />
+  <small>
+    <% @latest_users.each do |user| %>
+        <%= link_to fb_profile_pic(user.uid, :linked => false, :size => 'square'), user %><br />
+            <%=  link_to fb_name(user.uid, :capitalize => true, :linked => false), user %><br />
+            <%= link_to(user.organisation.short_name,user.organisation) %> - <%= user.country %><br />
+
+            <br />
+    <% end %>
+    <%= link_to "View all people (#{@number_of_users})", search_url(:template => 'only_results', :output => 'list', :clear_session => true) %>
+  </small>
+  <br>
+</div>
+
+
+<!-- <div style = "text-align:left;clear:both"> -->
+
+<div style="width: 748px;height: 18px;border:1px;clear: both; " >
+</div>
+
+<div class="menu" style="width: 748px;clear: both;" >
+  <h3>Who is surfing the <%= APPLICATION_NAME_WITH_STYLE %> right now?</h3>
+  <% @counter = 1 %>
+  <% @online_users.each do |user| %>
+    <%= "<br /><br />" if @counter.modulo(8) == 0 %>
+    <%= link_to fb_profile_pic(user.uid, :linked => false, :size => 'square'), user %> &nbsp;&nbsp; &nbsp; &nbsp;
+    <% @counter += 1 %>
+  <% end %>
+</div>
+
+<div style="width: 748px;height: 18px;border:1px;clear: both; " >
+</div>
+
+
+<div class="menu" style="width: 748px;clear: both;" >
+  <br >
+  <h3>Offers from organisations</h3>
+  <br>
+  There are a total of <%= link_to OrganisationPost.count.to_s+' offers', wanted_url(:template => 'basic', :output => 'list') %> posted by organisations in the <%= APPLICATION_NAME_WITH_STYLE %>
+  <!-- FOR INDIVIDUALS -->
+  <% if @offers_with_same_job_area.size > 1 %>
+    and
+    <%= link_to_if(@offers_with_same_job_area_url,
+                   pluralize(@offers_with_same_job_area.size, 'offer'),
+                   @offers_with_same_job_area_url) %>
+        <%= " (in <b>#{@offers_with_same_job_area_url.organisation.country.capitalize}</b>) " if  @offers_with_same_job_area.size == 1 %>
+    <%=  is_are(@offers_with_same_job_area.size) %>  relative to your job area: <b><%= @current_user.job_area_in_words -%></b><br />
+  <%= "Among these:<br />" if (@offers_with_same_job_and_duration_for_worker.size + @offers_with_same_job_and_duration_for_volunteer.size + @offers_with_same_job_and_duration_for_intern.size) > 0 -%>
+
+     <% if @current_user.go_as_worker > 0 && @offers_with_same_job_and_duration_for_worker.size > 0 %>
+      &ensp;&ensp; there <%=  is_are(@offers_with_same_job_and_duration_for_worker.size) %>
+      <%= link_to_if(@offers_with_same_job_and_duration_for_worker_url,
+                     pluralize(@offers_with_same_job_and_duration_for_worker.size, 'offer'),
+                     @offers_with_same_job_and_duration_for_worker_url) %>
+                     <%= " (in <b>#{@offers_with_same_job_and_duration_for_worker_url.organisation.country.capitalize}</b>) " if  @offers_with_same_job_and_duration_for_worker.size == 1 %>
+                     for <b><%= 'worker'.pluralize %></b> for <b><%=  @current_user.go_as_worker_duration_in_words.downcase  %></b>
+                     <br />
+     <% end %>
+
+     <% if @current_user.go_as_volunteer > 0 && @offers_with_same_job_and_duration_for_volunteer.size > 0 %>
+      &ensp;&ensp; there <%=  is_are(@offers_with_same_job_and_duration_for_volunteer.size) %>
+      <%= link_to_if(@offers_with_same_job_and_duration_for_volunteer_url,
+                     pluralize(@offers_with_same_job_and_duration_for_volunteer.size, 'offer'),
+                     @offers_with_same_job_and_duration_for_volunteer_url) %>
+                     <%= " (in <b>#{@offers_with_same_job_and_duration_for_volunteer_url.organisation.country.capitalize}</b>) " if  @offers_with_same_job_and_duration_for_volunteer.size == 1 %>
+                     for <b><%= 'volunteer'.pluralize %></b> for <b><%=  @current_user.go_as_volunteer_duration_in_words.downcase  %></b>
+                     <br />
+     <% end %>
+
+     <% if @current_user.go_as_intern > 0 && @offers_with_same_job_and_duration_for_intern.size > 0 %>
+      &ensp;&ensp; there <%=  is_are(@offers_with_same_job_and_duration_for_intern.size) %>
+      <%= link_to_if(@offers_with_same_job_and_duration_for_intern_url,
+                     pluralize(@offers_with_same_job_and_duration_for_intern.size, 'offer'),
+                     @offers_with_same_job_and_duration_for_intern_url) %>
+                     <%= " (in <b>#{@offers_with_same_job_and_duration_for_intern_url.organisation.country.capitalize}</b>) " if  @offers_with_same_job_and_duration_for_intern.size == 1 %>
+                     for <b><%= 'intern'.pluralize %></b> for <b><%=  @current_user.go_as_intern_duration_in_words.downcase  %></b>
+                     <br />
+     <% end %>
+     <br />
+     Take a look at the <%= link_to "Matchmaker", :controller => 'matchmaker' %>  section for more advices.<br/>
+
+  <% end %>
+
+  <br />
+  <b>Latest offers:</b><br />
+  <br />
+  <% @latest_organisation_posts.each do |organisation_post| %>
+    <%= link_to "#{organisation_post.organisation.short_name} (#{organisation_post.organisation.country}) is looking for: #{organisation_post.category.capitalize}", organisation_post %>  -- <small> posted by <%= link_to fb_name(organisation_post.user.uid, :linked => false), organisation_post.user %> <%=h time_ago_in_words(organisation_post.updated_at) %> ago </small><br />
+  <% end %>
+
+  <br>
+  <%= link_to 'View details of all offers', wanted_url(:template => 'basic', :output => 'list') %>
+  <br>
+  <br>
+
+  <br>
+
+
+  <h2>Volunteers for <%=  @current_user.organisation.short_name %> </h2>
+    <br />
+    Does <%=  @current_user.organisation.short_name %> need help with short budget?<br />
+            There are <b><%= @users_volunteers.size %></b> people offering themselves as volunteers! <%= link_to 'Have a look', @users_volunteers_url %>: there's maybe something suitable in exchange of good experiences/context.<br />
+    <br />
+    Take a look at the <%= link_to "Matchmaker", :controller => 'matchmaker' %>  section for more advices.<br/>
+
+
+    <!--
+    <br>
+    <br>
+    <h3>Face to face contacts</h3>
+    <br>
+    <% @contacts.each do |contact| %>
+      <%= link_to fb_name(contact.user.uid, :linked => false, :capitalize => true),  contact.user %> (<%= contact.user.country %>)
+      and
+      <%= link_to fb_name(contact.contacted_user.uid, :linked => false, :capitalize => true),  contact.contacted_user %> (<%= contact.contacted_user.country %>)
+      met
+      <%= time_ago_in_words(contact.when) %> ago,
+      reason:  <i><%= contact.description %></i>
+      <%= " (#{link_to 'edit', edit_contact_url(contact)})" if @current_user == contact.user %><br />
+    <% end %>
+    <% @visits.each do |visit| %>
+      <%= link_to fb_name(visit.user.uid, :linked => false, :capitalize => true),  visit.user %> (<%= visit.user.country %>),
+      <%= time_ago_in_words(visit.when) %> ago, visited
+      <%= link_to visit.organisation.short_name, visit.organisation %> (<%= visit.organisation.country %>),
+      reason:  <i><%= visit.description %></i>
+      <%= " (#{link_to 'edit', edit_visit_url(visit)})" if @current_user == visit.user %><br />
+    <% end %>
+    <br>
+    <br>
+    -->
+  <br />
+  <br />
+
+</div>
+
+<div style="width: 748px;height: 18px;border:1px;clear: both; " >
+</div>
+
+<div class="menu" style="width: 748px;clear: both;" >
+  <h3>Latest Arts Jobs from our partner <a href="http://www.culturejobsinternational.org">Culture Jobs International</a></h3>
+  <br />
+  <a href="http://www.culturejobsinternational.org" target="_blank">
+    <img width ="100px" alt ="" src="http://changingroom.teh.net/wp-content/themes/default/images/CJI_logo.png" border="0"/>
+  </a>
+  <br />
+  <br />
+  <div id="CjiJobsList">
+    <%= @cji_jobs %>
+  </div>
+  <br />
+  <a href="http://www.culturejobsinternational.org" target="_blank">
+    <img alt =""src="http://changingroom.teh.net/wp-content/themes/default/images/jobsbutton.png" border="0"/>
+  </a>
+  <br>
+  <br>
+</div>
+
+

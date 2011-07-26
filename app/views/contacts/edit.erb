@@ -1,0 +1,27 @@
+<h1>Contact Description</h1>
+<br />
+Update details about your contact with
+<strong>
+  <%= link_to fb_name(@contact.contacted_user.uid, :linked => false), @contact.contacted_user %>
+</strong>
+
+<% form_for(@contact) do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :when, 'When' %><br />
+    <%= f.date_select :when, :order => [:month, :year],:start_year => Time.now.year-30, :end_year => Time.now.year #, :include_blank => true
+       %>
+  </p>
+  <p>
+    <%= f.label :description %> <small>(where? reason?...)</small><br />
+    <%= f.text_field :description, :size => 40, :maxlength=> 60 %>
+  </p>
+
+  <p>
+    <%= f.submit 'Update' %>
+    <%= link_to 'Remove', @contact, :confirm => 'Are you sure?', :method => :delete %>
+  </p>
+  <p>
+    <%= link_to 'Back to '+fb_name(@contact.contacted_user.uid, :linked => false), @contact.contacted_user %>
+  </p>
+<% end %>

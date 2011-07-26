@@ -1,0 +1,76 @@
+<%= render :partial => 'menu' %>
+<br >
+
+<h2>Same Job Area</h2>
+<br >
+<p>
+<i>Sharing solutions/problems/advice with people working within a similar job in different organisations has always been a big help, so here is
+some advice on people you could know/meet: </i><br />
+
+</p>
+<br />
+<p>
+<% if @users_with_same_job_area.size == 0 %>
+        <i>(sorry, nobody is working in your area, yet.)</i>
+<% else %>
+  <%= link_to_if( @users_with_same_job_area_url,
+                 pluralize(@users_with_same_job_area.size, 'person'),
+                  @users_with_same_job_area_url) %>
+                <%= " (#{link_to fb_name(@users_with_same_job_area[0].uid, :linked => false), @users_with_same_job_area[0]}) " if @users_with_same_job_area.size == 1 -%>
+  <%=  is_are(@users_with_same_job_area.size) %> working in the same your area (<%= @current_user.job_area_in_words %>)<br />
+
+  <% if @users_with_same_job_area_and_hosting.size >0  %>
+    <%  if @users_with_same_job_area.size>1 %>
+      <br />
+      Among these: <br />
+      <br />
+    <% else %>
+      and
+    <% end %>
+    <% if @users_with_same_job_area_and_visiting.size > 0 %>
+    <%= link_to  pluralize(@users_with_same_job_area_and_visiting.size, 'person'),
+                  @users_with_same_job_area_and_visiting_url %>
+      <%= " (#{link_to fb_name(@users_with_same_job_area_and_visiting[0].uid, :linked => false), @users_with_same_job_area_and_visiting[0]}) " if @users_with_same_job_area_and_visiting.size == 1 -%>
+      explicitely stated <%=  he_she_they(@users_with_same_job_area_and_visiting) -%> would like to go to another organisation for a short visit. <br />
+    <%  end %>
+    <%= link_to_if( @users_with_same_job_area_and_hosting_url,
+                 pluralize(@users_with_same_job_area_and_hosting.size, 'person'),
+                  @users_with_same_job_area_and_hosting_url) %>
+      <%= " (#{link_to fb_name(@users_with_same_job_area_and_hosting[0].uid, :linked => false), @users_with_same_job_area_and_hosting[0]}) " if @users_with_same_job_area_and_hosting.size == 1 -%>
+
+    <% if @current_user.hosting != 'no' %>
+      <%=  is_are(@users_with_same_job_area_and_hosting.size) %> also available for hosting, as you do, so
+      why don't you invite <%= him_her_them(@users_with_same_job_area_and_hosting) %> for a weekend to visit your organisation, to meet you,
+      <% if @current_user.infopoint == 'yes' %>
+        and to introduce <%= him_her_them(@users_with_same_job_area_and_hosting) %> to <%=  @current_user.city.capitalize %>?
+      <% end %>
+      you may then go to visit <%= him_her_them(@users_with_same_job_area_and_hosting) %> in exchange.
+    <% else %>
+      <%=  is_are(@users_with_same_job_area_and_hosting.size) %> also available for hosting, so take a look at <%=  his_her_their(@users_with_same_job_area_and_hosting) %> organisation and profile, you may find somebody interesting to meet.
+    <% end %>
+      <br />
+      <br />
+      <%= show_users_pic(@users_with_same_job_area_and_hosting) %>
+  <% else %>
+
+    <%  if @users_with_same_job_area.size>1 %>
+      <br />
+      none of them are <br />
+      <br />
+    <% else %>
+      <%= he_she(@users_with_same_job_area[0]) %> is not
+    <% end %>
+    available for hosting.
+    <% if @users_with_same_job_area_in_short_distance.size >0 %>
+      but
+      <%= link_to_if( @users_with_same_job_area_in_short_distance_url,
+                 pluralize(@users_with_same_job_area_in_short_distance.size, 'person'),
+                  @users_with_same_job_area_in_short_distance_url) %>
+      live less then <%= @colleague_distance %> km from you, so why don't you go to see <%= him_her_them(@users_with_same_job_area_in_short_distance) %>
+      for a daily visit?<br/ >
+      <%= show_users_pic(@users_with_same_job_area_in_short_distance) %>
+    <% end %>
+  <% end %>
+
+<% end %>
+</p>

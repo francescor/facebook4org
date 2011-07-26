@@ -1,0 +1,60 @@
+<h1>Editing accommodation</h1>
+
+<% form_for(@accommodation) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :user_id %><br />
+    <%= f.text_field :user_id %>
+  </p>
+  <p>
+    <%= f.label :organisation_id %><br />
+    <%= f.text_field :organisation_id %>
+  </p>
+  <p>
+    Country<br />
+    <%= select 'accommodation', 'type', ACCOMMODATION_TYPES %>
+  </p>
+  <p>
+    <%= f.label :address %><br />
+    <%= f.text_field :address %>
+  </p>
+  <p>
+    <%= f.label :city %><br />
+    <%= f.text_field :city %>
+  </p>
+  <p>
+    State/Province<br />
+    <%= f.text_field :state %>
+  </p>
+  <p>
+    Country<br />
+    <%= select 'accommodation', 'country', COUNTRY_TYPES %>
+  </p>
+  <p>
+    <%= f.label :post_code %><br />
+    <%= f.text_field :post_code %>
+  </p>
+  <p>
+    <%= f.label :latitude %><br />
+    <%= f.text_field :latitude %>
+  </p>
+  <p>
+    <%= f.label :longitude %><br />
+    <%= f.text_field :longitude %>
+  </p>
+  <p>
+    <%= f.label :status %><br />
+    <%= select 'accommodation', 'status', ACCOMMODATION_STATUS_TYPES %>
+  </p>
+  <p>
+    <%= f.label :description %><br />
+    <%= f.text_area :description %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @accommodation %> |
+<%= link_to 'Back', accommodations_path %>

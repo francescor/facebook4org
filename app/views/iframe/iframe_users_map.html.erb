@@ -1,0 +1,23 @@
+<% if @status == 'ok' %>
+<div style = "text-align:left;" >
+  <%=  "Results: <b>#{@users.size}</b>" %>
+</div>
+<!--
+  <div style = "text-align:right;" >
+    Map not working?<%= link_to 'Reload map', request.env['REQUEST_URI'] %>
+  </div>
+-->
+<!--
+<div style = "text-align:right;" onclick="document.getElementById('map_div').style.display = 'block';
+  map.checkResize();map.setCenter(new GLatLng(<%= @map_center_lat -%>,<%=  @map_center_lng -%>), <%=  @map_zoom -%>);">
+    <%=  image_tag('center_map.png', :alt => 'Center', :title => 'Click to center the map' ) %>
+    Click to center
+</div>
+-->
+
+<br />
+  <%= GMap.header %>
+  <%= javascript_include_tag("markerGroup") %>
+  <%= @map.to_html%>
+  <%= @map.div(:width => 600, :height => 400)%>
+<% end %>

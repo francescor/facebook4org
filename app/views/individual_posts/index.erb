@@ -1,0 +1,29 @@
+<h1>List of your expert offers</h1>
+
+<br />
+<%= link_to 'Add a New offer', new_individual_post_path %>
+
+<br />
+<br />
+<table>
+  <tr>
+    <th>Title</th>
+    <th>Type</th>
+    <th>When</th>
+    <th>Description</th>
+  </tr>
+
+<% @individual_posts.each do |individual_post| %>
+  <tr>
+    <td><%=h individual_post.title %></td>
+    <td><%=h individual_post.kind %></td>
+    <td><%=h individual_post.when %></td>
+    <td><%=h individual_post.description %></td>
+    <td><%= link_to 'Edit', edit_individual_post_path(individual_post) %></td>
+    <td><%= link_to 'Remove', individual_post, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+

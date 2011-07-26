@@ -1,0 +1,29 @@
+<div style = "text-align:right;" >
+  <fb:bookmark></fb:bookmark>
+</div>
+<h2> Tip </h2>
+
+
+
+
+<br />
+
+To get a quick link to the <%= APPLICATION_NAME_WITH_STYLE %> you can now add it to your Facebook profile tab: <br />
+<br />
+<br />
+<%= image_tag  'add_tab_example.jpg', :alt => '' %>
+<br />
+<br />
+<br />
+<br />
+<br />
+  <fb:comments xid="add_tab_example"
+               canpost="true"
+               <% if @current_user.is_admin %>
+                 candelete="true"
+               <% else %>
+                 candelete="false"
+               <% end %>
+  </fb:comments>
+<br />
+<br />

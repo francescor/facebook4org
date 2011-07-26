@@ -1,0 +1,50 @@
+<br>
+<h1>List of offers </h1>
+<br>
+
+<%= link_to 'Write a new Offer', new_organisation_post_path %>
+<br><br>
+<table border="1" cellspacing="0" cellpadding="4">
+ <tr>
+    <th>Organisation</th>
+    <th>is looking for</th>
+    <th>Area</th>
+    <th>When</th>
+    <th>Duration</th>
+    <th>Short description</th>
+    <th>Description</th>
+    <th>Created by</th>
+    <th>&nbsp;</th>
+
+  </tr>
+
+<% @organisation_posts.each do |organisation_post| %>
+  <tr>
+    <td><strong><%= organisation_post.organisation.short_name %></strong><br />
+        <%=h organisation_post.organisation.country %></td>
+    <td><strong><%=h organisation_post.category %></strong></td>
+    <td><%=h organisation_post.area_in_words %></td>
+    <td><%=h organisation_post.when.month %>/<%=h organisation_post.when.year %></td>
+    <td><%=h organisation_post.duration_in_words %></td>
+    <td><%=h organisation_post.short_description %></td>
+    <td><%=h truncate(organisation_post.description, :length => 35) %><br/><%= link_to('read more', organisation_post) unless organisation_post.description.blank? -%></td>
+
+    <td>
+      Created by
+      <%=  link_to fb_name(organisation_post.user.uid, :capitalize => true), organisation_post.user -%>,
+      <%=h time_ago_in_words(organisation_post.updated_at) %> ago.
+    </td>
+    <td>
+      <% if organisation_post.user == @current_user || @current_user.is_admin %>
+        <%= link_to 'Edit', edit_organisation_post_path(organisation_post) %><br>
+        <%= link_to 'Remove', organisation_post, :confirm => 'Are you sure?', :method => :delete %><br>
+      <% end %>
+      <%= link_to 'Show', organisation_post %><br />
+      <%= link_to 'Print', '#' %>
+    </td>
+  </tr>
+
+<% end %>
+</table>
+
+<br />

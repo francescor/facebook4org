@@ -1,0 +1,17 @@
+
+
+<fb:fbml version="1.1">
+
+
+  <link rel="stylesheet" type="text/css" media="screen" href=<%=  stylesheet_path 'base' %> />
+
+  <h1><%= image_tag  'cr_logo_16px.png', :alt=> ' ' %> <%= APPLICATION_LONG_NAME %></h1>
+  <br>
+
+  <%=  facebook_messages %>
+
+  <br>
+  <%= yield %>
+  <br>
+
+</fb:fbml>

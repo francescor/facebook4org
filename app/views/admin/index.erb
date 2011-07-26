@@ -1,0 +1,22 @@
+<%= render :partial => 'menu' %>
+<br >
+Hey <%= fb_name(@current_user.uid, :firstnameonly => true, :useyou => false, :linked => false) %>, <br />
+<br />
+<% if ADMIN_GROUP_GID.blank?  %>
+  you are an administrator; if you want set other administrator create a closed Facebook group and set it's group ID in ADMIN_GROUP_GID (environment.rb).<br />
+<% else %>
+  since you are a member of the <%=   fb_grouplink(ADMIN_GROUP_GID) %> group, you are allowed to this administration section.<br />
+<% end %>
+<br />
+Here, you can:<br />
+<ul>
+  <li>See all <%= link_to "Users", :action => 'users_list' %> that have registered with this application and their posts</li>
+  <li>Edit the <%= link_to "Organisations", :controller => 'organisations'  %> (to update organisation's map data see the <%= link_to "cron", :action => :cron %> tab.</li>
+  <li>Take a look at cronological List of Changes and updates to all databases (todo)</li>
+  <li>Add a news all Users will see when they log in (todo)</li>
+  <li>Send a message to all Users on behalf of the <%= APPLICATION_LONG_NAME %> (todo) </li>
+  <li>or just browse and edit all <%= link_to 'Databases', :action => 'databases' %></li>
+</ul>
+<br />
+<p>To report bugs/issue please open a ticket in the <%= link_to 'MatchMaker Bugs Tracking System','http://trac.archenet.it/matchmaker' %>.
+</p>

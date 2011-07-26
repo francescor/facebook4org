@@ -1,0 +1,23 @@
+<h1>New offer for <%= @current_user.organisation.name %></h1>
+
+<p>
+<i>Please note</i>: once you create this offer several users will be <strong>automatically notified</strong> (either in their notification tab, or in their email, according to their notification preferences), so check twice what you have written before creating it.
+</p>
+
+
+<% facebook_form_for(@organisation_post, :labelwidth => "300") do |f| %>
+  <%= f.error_messages %>
+
+    <input name="organisation_post[organisation_id]" type="hidden" value =<%=  @current_user.organisation.id %> />
+    <%#
+    TODO the next one may go to the _edit since we want to keep track of the user who update this post (but not if is admin)
+    %>
+
+  <%= render :partial => 'form', :locals => { :f => f }  %>
+
+  <p>
+    <%= f.buttons 'Create' %>
+  </p>
+
+<% end %>
+

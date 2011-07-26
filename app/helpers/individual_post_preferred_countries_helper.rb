@@ -1,0 +1,2 @@
+module IndividualPostPreferredCountriesHelper
+end

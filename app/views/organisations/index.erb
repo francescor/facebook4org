@@ -1,0 +1,46 @@
+<h1>Listing organisations</h1>
+<% if  @current_user.is_admin %>
+  <%= link_to 'New organisation', new_organisation_path %>
+<div style = "text-align:right;" >
+  <i>To remove an organisation, remove all its users first</i>
+</div>
+<% end %>
+
+<br/>
+<br/>
+
+<table border="1" cellpadding="4" cellspacing="0">
+  <tr>
+    <th>Short Name</th>
+    <th>Name</th>
+    <th>N.Users</th>
+    <th>Homepage</th>
+    <th>Location</th>
+  </tr>
+
+<% @organisations.each do |organisation| %>
+  <tr>
+    <td><strong><%=  link_to organisation.short_name, organisation %></strong></td>
+    <td><%= link_to organisation.name, organisation %> </td>
+    <td><%= link_to_if organisation.users.size>0, "#{pluralize(organisation.users.size, 'User')}", search_url(:template => 'advanced', :clear_session => 'true', :filter_organisation => organisation) %></td>
+    <td><%= (link_to organisation.homepage, 'http://'+organisation.homepage) unless organisation.homepage.blank? %></td>
+    <td><%=h organisation.city %> - <strong><%=h organisation.country %></strong></td>
+  <% if  @current_user.is_admin %>
+    <td>
+      <%= link_to 'Edit',   edit_organisation_path(organisation) %><br />
+      <% unless @current_user.organisation == organisation %>
+        <% if  organisation.users.size == 0 %>
+          <%= link_to 'Remove', organisation,
+             :confirm => "Are you sure? WARNING: You will also delete: " +
+                         "all its #{pluralize(organisation.organisation_posts.size, 'Organisation Post')} "+
+                         "and its #{pluralize(organisation.visits.size, 'Visits')}!!", :method => :delete %>
+        <% end %>
+      <% end %>
+    </td>
+  <% end %>
+  </tr>
+<% end %>
+</table>
+
+<br />
+

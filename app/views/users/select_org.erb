@@ -1,0 +1,23 @@
+
+<br/>
+<br/>
+Select the <%= MOSNL -%> cultural organisation you work for or are involved with: <br/>
+
+<% form_for(@current_user) do |f| %>
+  <input name='edit_action' type='hidden' value = 'select_org' />
+  <p>
+    <%= f.label :organisation_id, "Organisation:" %><br />
+    <%= select 'user', 'organisation_id', @organisations_type %> <br/>
+    <small><%= "your organisation is not listed here? Contact #{MOSNL} to add it<br> " -%></small>
+  </p>
+  <br/>
+
+  <p>
+    <%= f.submit 'Continue' %>
+  </p>
+<br/>
+<% end %>
+
+<br/>
+<br/>
+

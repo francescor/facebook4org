@@ -1,0 +1,27 @@
+<p>
+  <%= fb_profile_pic(@individual_post.user.uid) %><br>
+</p>
+
+<p>
+  <b>Title:</b>
+  <%=h @individual_post.title %>
+</p>
+
+<p>
+  <b>Type:</b>
+  <%=h @individual_post.kind %>
+</p>
+
+<p>
+  <b>When:</b>
+  <%=h @individual_post.when %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%=h @individual_post.description %>
+</p>
+
+<% if @currrent_user ==  @individual_post.user %>
+<%= link_to 'Edit', edit_individual_post_path(@individual_post) %>
+<% end %>

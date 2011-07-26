@@ -1,0 +1,43 @@
+
+<%= f.text_field :name, :label => '*Name' %>
+
+<%= f.text_field :short_name, :size => 15, :maxlength=> 15, :label => "*Short Name" %>
+
+<%= f.text_field :city %>
+
+<fb:editor-custom label='Street'>
+  <%= text_field :organisation, :street %>
+  <small>enter the geographical location, not the postal address</small>
+</fb:editor-custom>
+
+<%= f.text_field :post_code, :size => 10, :maxlength=> 10, :label => 'Post Code'  %>
+
+<fb:editor-custom label='Country'>
+  <%= select 'organisation', 'country', COUNTRY_TYPES %>
+</fb:editor-custom>
+
+<fb:editor-custom label='Region'>
+  <%= text_field :organisation, :state %>
+  <small>(not necessary)</small>
+</fb:editor-custom>
+
+
+<%= f.text_field :homepage, :label => '*Home Page' %>
+
+<%= f.text_field :teh_link, :label => "Link in #{MAIN_ORG_LINK}" %>
+
+<fb:editor-custom label='Facebook link'>
+  <%= text_field :organisation, :facebook_link %>
+  <small>link to Organisation's Facebook group or fan page</small>
+</fb:editor-custom>
+
+<fb:editor-custom label='Image link'>
+  <%= text_field :organisation, :image_link %>
+  <small>(please link a web image smaller then 200x200px)</small>
+</fb:editor-custom>
+
+<% if @current_user.is_admin %>
+  <fb:editor-custom label='<%= MAIN_ORG_SHORT_NAME-%> Membership'>
+    <%= select 'organisation', 'teh_membership', MAIN_ORG_MEMBERSHIP_TYPES %>
+  </fb:editor-custom>
+<% end %>

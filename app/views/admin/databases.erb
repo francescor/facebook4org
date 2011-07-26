@@ -1,0 +1,22 @@
+<%= render :partial => 'menu' %>
+<br >
+
+<h1>Databases</h1>
+<br>
+<%= link_to "Users", :action => 'users_list' %><br>
+<%= link_to "User Spoken Languages", :controller => 'user_spoken_languages'  %><br>
+<%= link_to "User Visits to organisations", visits_path  %><br>
+<%= link_to "User Contacs", contacts_path  %><br>
+
+<br>
+<%= link_to "Organisations", :controller => 'organisations'  %><br>
+<%= link_to "Organisation Posts", :controller => 'organisation_posts'  %><br>
+<%= link_to "Organisation Post Spoken Languages", :controller => 'organisation_post_spoken_languages'  %><br>
+<br>
+<%= link_to "IndividualPosts", :controller => 'individual_posts'  %><br>
+<%= link_to "IndividualPostPreferredCountries", :controller => 'individual_post_preferred_countries'  %><br>
+<br>
+<%= link_to "Accomodations", :controller => 'accommodations'  %><br>
+<br>
+<%= link_to "Languages", :controller => 'languages'  %><br>
+

@@ -1,0 +1,71 @@
+= <b>Facebook4org</b>
+=== Facebook for organisations
+
+
+A demo installation of <b>Facebook4org</b> is available at http://apps.facebook.com/demo-fforg
+
+See also the FAQ - Frequently asked questions at https://github.com/francescor/facebook4org/wiki
+
+== What is it?
+
+<b>Facebook4org</b> is a Facebook application which gives organisations and their members the ability to be in touch with each other.
+
+<b>Facebook4org</b> is used by Trans Europe Halles http://www.teh.net for its TEH-MatchMaker at http://apps.facebook.com/changingroom, with which staff and volunteers working at cultural centres in the Trans Europe Halles (TEH) network can connect and communicate with each other.
+
+== How does it work?
+
+Once <b>facebook4org</b> is installed and configured, an association (or a network of organisations as was the case for Trans Europe Halles) can invite their members to join-in with their facebook account.  Organisations will easily be able to see all "faces" of its members, and members can be in touch with each others without necessarly having to become facebook-friends.
+
+== Why should I use <b>facebook4org</b> and not just a Facebook Group, or a Facebook Fan-Page?
+
+<b>Facebook4org</b> has been developed for the lack of tools for associations available in Facebook.  The core is a sort of "people finder" in between an organisation or a network
+of organisations: a search function which allows people to look across a series of dimensions to identify colleagues with shared interest.
+
+As an example these are some of the features you find in <b>facebook4org</b>:
+* Members can search other members by location, by country, by job area, ...
+* All members and organisation can be spotted in google map (with pins with their picture)
+* Members profile is enhanced: and members can add profile informations that will be only visible inside <b>facebook4org</b> and not outside it.
+* Organisations and Members can post annouces, offers, and posts in a private message board not visible for non members
+* Notifications for new members, and the ability for the organisation to communicate to its members without all the annoying limits Facebook has.
+
+
+== Typical scenario for Facebook4org
+
+Trans Europe Halles is a network of about 50 organisations each representing an independent cultural centres,
+and each with many workers and volunteers.  TEH uses Facebook4org for its <b>ChangingRoom MatchMaker</b>: a tool created to stimulate
+cross-border <i>mobility</i> of cultural operators: this aim reflect the code of Facebook4org in which, for example,
+* each users is asked if she/he is available to travel, to visit, to host somebody in the network...
+* organisations can post their offer to host people
+
+Another typical scenario is when a user is travelling and needs some <i>connection</i> (somebody
+that can host him, or that can give him advices) in another city, country.  Something like the
+great www.couchsurfing.org, but without exposing users' hospitality to the general public
+(so all hosting request and offers can stay <i>inside</i> a network of friends).
+Once a user find somebody who are willing to help them, they can contact them (inside or outside
+facebook) and/or see if they have some friends in common who can introduce them.
+
+Another similar scenario is Streetopia http://apps.facebook.com/streetopia.  As with Trans Europe Halles, they used Facebook4org to develop and personalize their exchange platform.
+
+== How do I install?
+
+In this repository you'll find all the code necessary to set a facebook application for your organisation.
+
+For detailed installing instruction see the INSTALL file.
+
+== Requirements
+
+* Ruby on rails
+* The facebooker Rails plugin http://github.com/mmangino/facebooker
+* Ruby GeoKit http://geokit.rubyforge.org/api/geokit-rails
+* YM4R (Yellow Maps for Ruby) Rails plugin for Google Maps http://rubyforge.org/projects/ym4r
+
+== License
+
+
+Facebooker4org is released under GNU General Public License http://www.gnu.org/licenses/gpl.html
+
+== Contacts & Help
+
+I dedicate my spare time to the free development and updates of Facebook4org: if you need any (free) help don't esitate to contact me.  As usual I won't develop custom tools/code for you, but I can give you free advices on how to adapt this application to your need. 
+
+Long life to free opensource software ;)

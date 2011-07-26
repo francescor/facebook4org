@@ -1,0 +1,18 @@
+<p>
+  <b>User:</b>
+  <%=h @user_spoken_language.user_id %>
+</p>
+
+<p>
+  <b>Language:</b>
+  <%=h @user_spoken_language.language_id %>
+</p>
+
+<p>
+  <b>Rank:</b>
+  <%=h @user_spoken_language.rank %>
+</p>
+
+
+<%= link_to 'Edit', edit_user_spoken_language_path(@user_spoken_language) %> |
+<%= link_to 'Back', user_spoken_languages_path %>

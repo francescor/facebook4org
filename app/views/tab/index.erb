@@ -1,0 +1,127 @@
+<div style="width: 748px;clear: both;" >
+<br>
+<%= image_tag  'cr_logo_rgb_web_72-237x300_DEMO.jpg', :alt=> '   ', :height=>"150" , :style=>"float: left; margin-right: 15px; margin-bottom: 15px;"%>
+
+<p>
+
+  Connect and communicate with staff and volunteers working at cultural centres in the
+  <%= link_to "#{MAIN_ORG_NAME} (#{MAIN_ORG_SHORT_NAME})", MAIN_ORG_NAME %>.
+  
+</p>
+
+<p>
+
+<%= link_to "CHANGING ROOM", 'http://www.teh.net/changingroom' %> is a pilot project by <%= link_to "Trans Europe Halles", 'http://www.teh.net' %>
+looking for new ways of stimulating cross-border mobility of cultural operators.  See other tools in the <%= TOOLKIT_LINKED_NAME %>.
+
+</p>
+
+<p>
+ <%= button_to 'Enter', 'http://apps.facebook.com/changingroom/main' %>
+</p>
+
+</div>
+
+
+
+
+<br />
+
+
+<div class="menu" style="width: 510px; height: 500px;float:left;clear:both" >
+  <h3>  Quick links:</h3>
+  <ul>
+  <li>
+    <%= link_to 'Search for people', search_url(:output => 'list', :reset => 'all', :show_quick_search => 'yes', :template => 'basic' ) %>
+   <div class="descrip">Look up profiles of people wanting to go to organisations.</div>
+  </li>
+
+  <li>
+    <%= link_to 'Search for organisations', search_organisations_url(:template => 'basic', :output => 'list', :clear_session => true) %>
+   <div class="descrip">View details of all registered organisations.</div>
+  </li>
+
+  <li>
+    <%= link_to 'Offers by Organisations', wanted_url(:template => 'basic', :output => 'list', :clear_session => true) %>
+    <div class="descrip"> Are organisations searching for people like you?
+    </div>
+  </li>
+
+
+  <li>
+    <%= link_to 'Update your profile', settings_url %>
+   <div class="descrip">Check & update the information other <%= APPLICATION_NAME_WITH_STYLE %> users see about you.</div>
+  </li>
+
+
+  <li>
+    <%= link_to 'Write an offer', new_organisation_post_url %>
+    <div class="descrip">Write an offer for an exchange, for volunteers, interns or workers.</div>
+  </li>
+
+  <li>
+    <%= link_to 'Write a message on the Message Board',   :controller => 'main', :action => 'message_board'  %>
+    <div class="descrip">This is place for discussion between <%= MAIN_ORG_NAME %> people.</div>
+  </li>
+
+  <li>
+    <%= link_to 'Invite friends', new_invitation_url %>
+   <div class="descrip">Access to <%= APPLICATION_NAME_WITH_STYLE %> is not public,
+                        but your <%= MAIN_ORG_NAME %> friends can use it.
+                        <%= link_to 'Invite', new_invitation_url %> them to join the <%= APPLICATION_NAME_WITH_STYLE %> now!</div>
+  </li>
+
+
+  </ul>
+
+  <% if @online_users.size > 0 %>
+   <br />
+   <br />
+   <br />
+    <h3>Who is surfing the <%= APPLICATION_NAME_WITH_STYLE %> right now?</h3>
+    <% @counter = 1 %>
+    <% @online_users.each do |user| %>
+      <%= "<br /><br />" if @counter.modulo(8) == 0 %>
+      <%= link_to fb_profile_pic(user.uid, :linked => false, :size => 'square'), user %> &nbsp;&nbsp; &nbsp; &nbsp;
+      <% @counter += 1 %>
+    <% end %>
+  <% end %>
+</div>
+
+
+<div  style = "text-align:center;border:0px solid #BDC7D8;padding:5px; width: 205px;float:right; height: 120px; ">
+
+
+
+
+   <%= APPLICATION_NAME_WITH_STYLE %> is part of the <br />
+   <br />
+   <%= link_to (image_tag 'toolkit_logo.jpg', :width => '130', :alt => ''), 'http://changingroom.teh.net' %><br />
+   <br />
+   <small>
+     <%= link_to 'View other tools', 'http://changingroom.teh.net' %><br />
+   </small>
+
+
+</div>
+
+<div  style = "text-align:center;border:0px solid #BDC7D8;padding:5px; width: 205px;float:right; height: 10px; ">
+</div>
+
+<div  style = "text-align:center;border:1px solid #BDC7D8;padding:5px; width: 205px;float:right; height: 350px; background:#F7F7F7;">
+
+  Latest People who joined<br />
+  <br />
+  <small>
+    <% @latest_users.each do |user| %>
+        <%= link_to fb_profile_pic(user.uid, :linked => false, :size => 'square'), user %><br />
+            <%=  link_to fb_name(user.uid, :capitalize => true, :linked => false), user %><br />
+            <%= link_to(user.organisation.short_name,user.organisation) %> - <%= user.country %><br />
+
+            <br />
+    <% end %>
+    <%= link_to "View all people (#{@number_of_users})", search_url(:template => 'only_results', :output => 'list', :clear_session => true) %>
+  </small>
+  <br>
+</div>
+

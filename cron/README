@@ -1,0 +1,15 @@
+esegui (nell'ambiente che ti interessa):
+
+script/console
+load '/home/dante/rails/matchmaker/cron/populate_geoinfo.rb'
+load '/home/dante/rails/matchmaker/cron/reset_geoinfo.rb'
+load '/home/dante/rails/matchmaker/cron/populate_cache_info.rb'
+load '/home/dante/rails/matchmaker/cron/reset_cache_info.rb'
+
+su svezia.archenet.it
+load '~/rails_work/changingroom.archenet.it/cron/reset_geoinfo.rb'
+load '~/rails_work/changingroom.archenet.it/cron/populate_geoinfo.rb'
+load '~/rails_work/changingroom.archenet.it/cron/populate_cache_info.rb'
+load '~/rails_work/changingroom.archenet.it/cron/reset_cache_info.rb'
+
+

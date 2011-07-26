@@ -1,0 +1,25 @@
+
+<%= f.select  'category', ORGANISATION_POST_CATEGORY_TYPES, :label =>  "#{@current_user.organisation.short_name} is looking for" %>
+  
+<%= f.select 'area', ORGANISATION_POST_AREA_TYPES, :label => 'Area' %>
+
+<fb:editor-custom label='When the position will approximatly start?'>
+  <%= date_select  :organisation_post, :when, :order => [:month, :year],:start_year => Time.now.year, :end_year => Time.now.year+5 %>
+</fb:editor-custom>
+
+<%= f.select :duration, ORGANISATION_POST_DURATION_TYPES, :label => "For how long?" %>
+
+<fb:editor-custom label='Short Description'>
+  <%= text_field :organisation_post, :short_description, :size => 30, :maxlength=> 35 %>
+  <small>(max 35 chars)</small>
+</fb:editor-custom>
+
+<fb:editor-custom label='Description'>
+  <%= text_area :organisation_post, :description, :cols => 90, :rows => 6 %>
+  <small>
+    what type of activities and responsibilities are involved with this position? How can people can apply?<br />
+    Include what you are offering (accommodation, travel costs, food, etc).<br />
+  </small>
+</fb:editor-custom>
+
+  

@@ -1,0 +1,2 @@
+module OrganisationPostsHelper
+end

@@ -1,0 +1,103 @@
+<%= render :partial => 'menu' %>
+<h1>Users list</h1>
+<br />
+<small>
+  Signup_step:<br />
+  <b>0</b>: User have only reached the "choose your organisation" step, but did not choose it<br />
+  <b>1</b>: User have choosen the organisation, but then did not go further since could not for not being in the Fb group, or just because he did not want to.<br />
+  <b>2</b>: User belogns to Fb admission group, have filled the preferences but still need to fill up preferences<br />
+  <b>3</b>: User is a full MM user, but the permission for constant authorization is missing.<br />
+  <b>4</b>: User is fully admitted, and has given (at least once) the constant authorization permission (he may revoke it: once in awhile set all '4' step to '3')<br />
+</small>
+<br />
+<table class = 'users_list'>
+  <tr>
+    <th><%=  link_to "Name", url_for(:controller => 'admin', :action => 'users_list', :order => 'cached_name') %></th>
+    <th>Belongs to ADMISSION Facebook Group</th>
+    <th>Have authorized the MM app?</th>
+    <th><%=  link_to "Signup step", url_for(:controller => 'admin', :action => 'users_list', :order => 'signup_step') %></th>
+    <th>Notifications <br /><%= link_to "View all", notifications_path %></th>
+    <th><%=  link_to "Organisation", url_for(:controller => 'admin', :action => 'users_list', :order => 'organisation_id') %></th>
+    <th>User Data</th>
+    <th><%=  link_to "Last Access", url_for(:controller => 'admin', :action => 'users_list', :order => 'last_access') %></th>
+    <th><%=  link_to "Session has Expired?", url_for(:controller => 'admin', :action => 'users_list', :order => 'session_expires') %> ('never'=user granted constant permission)</th>
+
+    <th><%=  link_to "Created at", url_for(:controller => 'admin', :action => 'users_list', :order => 'created_at') %></th>
+    <th><%=  link_to "Updated at", url_for(:controller => 'admin', :action => 'users_list', :order => 'updated_at') %></th>
+    <th></th>
+  </tr>
+  <% for user in @users %>
+    <tr>
+      <td>
+        <%= fb_profile_pic(user.uid, :facebook_logo => true) %><br>
+          <%=  link_to(fb_name(user.uid), user) unless user.signup_step == 0 %> <br />
+          <span style ="font-size: smaller;">C.Name: <br />
+          <%= user.cached_name %></span>
+      </td>
+      <td>
+        <fb:if-is-group-member gid="<%= ADMISSION_GROUP_GID -%>" uid="<%= user.uid %>">
+          Yes
+        <fb:else>
+          No, <%= link_to "invite", 'http://www.facebook.com/groups/edit.php?members&gid=5463607599' %>
+        </fb:else>
+        </fb:if-is-group-member>
+      </td>
+      <td>
+          <% fb_if_is_app_user(user.uid) do %>
+              Yes, has installed app
+            <% fb_else do %>
+              No, has removed app (why? he may does not like it?)
+            <% end %>
+         <% end %>
+      </td>
+      <td>
+        <%= user.signup_step %>
+        <%= "(OUT: still have to choose the organisation)" if user.signup_step == 0 %>
+        <%= "(OUT: have choosen organisation, but have still to edit the profile and preferences - MAYBE not yet admitted to the Admission group)" if user.signup_step == 1 %>
+        <%= "(OUT: still have to edit the preferences)" if user.signup_step == 2 %>
+        <%= " - OK (but next time will be asked for permission)" if user.signup_step == 3 %>
+        <%= " - OK" if user.signup_step == 4 %>
+
+      </td>
+      <td>
+        <%= link_to "Total", my_notifications_path+"?id=#{user.id}" %>: <%= "#{user.notifications.size}" unless user.notifications.empty? %><br />
+
+        <% if user.signup_step >= 3 %>
+          Unread: <%= "#{user.notifications_unread.size}" unless user.notifications_unread.empty? %><br />
+          DashCounter:<%=  @counter_hash[user.uid.to_s] %><br />
+          <%= link_to 'New Notification', "#{new_notification_path}?user_id=#{user.id}" %><br />
+          <%= "Email: yes<br />" unless user.email.nil? %>
+          Notify every: [<%= user.notification_by_email_every %>]<br />
+          What: 
+          <%= "[M]" if user.notify_match %>
+          <%= "[C]" if user.notify_colleague %>
+          <%= "[A]" if user.notify_notifications_for_all %>
+          <br />
+
+        <% end %>
+        <%= render_send_message(user) %><br />
+      </td>
+      <td><%= link_to(user.organisation.short_name,user.organisation) unless user.organisation.blank? %></td>
+      <td><%= pluralize user.organisation_posts.size, 'org. post' %><br />
+        <%= user_short_job(user) %>
+      </td>
+
+      <td><%= time_ago_in_words(user.last_access.to_date) %> ago</td>
+      <td>
+        <% if user.session_expires.nil? %>
+          never
+        <% else %>
+          <%= time_ago_in_words(user.session_expires.to_date) %> ago
+        <% end %>
+      </td>
+      <td><%= time_ago_in_words(user.created_at)  %> ago</td>
+      <td><%= time_ago_in_words(user.updated_at)  %> ago</td>
+      <td>
+        <%= link_to('Show', user)  unless user.signup_step == 0 %><br />
+        <% unless @current_user == user %>
+          <%= link_to 'Remove', user, :confirm => "Are you sure? you will also remove ALL HIS POSTS/CONTACTS/VISITS", :method => :delete %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>

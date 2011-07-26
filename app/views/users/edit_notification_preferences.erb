@@ -1,0 +1,43 @@
+
+  <h2>Notification Preferences</h2>
+  <br>
+<% if @current_user.email.blank? %>
+  <div style="color:red;" >
+    Your Email address is missing, and we need it to communicate with you. Please <%= link_to 'update your profile', :controller => :users, :action => :edit_profile, :id => @current_user.id %>. <br />
+    <br />
+  </div>
+<% end %>
+
+<% facebook_form_for(@user, :labelwidth => "300") do |f| %>
+  <%= f.error_messages %>
+
+  <input name='edit_action' type='hidden' value = 'edit_notifications_preferences' />
+
+  <%= f.label :notify_match,   "Select for which events you want to be notified:" %>
+  
+  <fb:editor-custom>
+    <%= check_box :user, :notify_match %>
+    <%=  "When the #{APPLICATION_NAME_WITH_STYLE} find a match for me" %>
+  </fb:editor-custom >
+
+    <fb:editor-custom>
+    <%= check_box :user, :notify_colleague %>
+    <%=   "When new users working in my area sign-up"%>
+  </fb:editor-custom >
+
+  <fb:editor-custom>
+    <%= check_box :user, :notify_notifications_for_all %>
+    <%=  "Whenever there is a new event <br>&nbsp;&nbsp;&nbsp;&nbsp;(new users, offers, updates, ..)"  %>
+  </fb:editor-custom >
+
+
+  <fb:editor-custom >
+    If there are new notifications for you, how often do you want to be notified?
+    <%= select :user, :notification_by_email_every, NOTIFICATION_BY_EMAIL_EVERY_TYPES %>
+
+  </fb:editor-custom >
+
+  <%= f.buttons 'Save' %>
+  
+
+<% end %>

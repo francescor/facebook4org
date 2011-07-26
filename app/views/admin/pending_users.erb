@@ -1,0 +1,93 @@
+<%= render :partial => 'menu' %>
+<h1>Penging users list</h1>
+<br />
+Users in this list have correctly signed up but need the approval of one administrator to be able to surf the <%= APPLICATION_NAME_WITH_STYLE %>. <br />
+You, or another administrator, should approve them.  Once you do it an automatic notification for new users (and for new colleague/match) will be sent
+to users how requested notifications.  Note that the notification will be sent only <i>when</i> each user have chosen to received it.
+<br />
+<br />
+Note: approved yours receive automatically a notification, while remove users don't.  So perhaps you should notify users you remove.
+<br />
+<%#= link_to "automatically approve all users with complete signup (4) without notifying others", :action => :bulk_approve %><br />
+
+<br />
+<% if @users.empty? %>
+<b><big>No users need to be approved</big></b><br />
+(if you've been told there were some, some other administrators may have approved them)
+<% else %>
+  <table class = 'users_list'>
+    <tr>
+      <th><%=  link_to "Name", url_for(:controller => 'admin', :action => 'users_list', :order => 'cached_name') %></th>
+      <th>Belongs to ADMISSION Facebook Group</th>
+      <th><%=  link_to "Signup step", url_for(:controller => 'admin', :action => 'users_list', :order => 'signup_step') %></th>
+      <th>Notifications <br /><%= link_to "View all", notifications_path %></th>
+      <th><%=  link_to "Organisation", url_for(:controller => 'admin', :action => 'users_list', :order => 'organisation_id') %></th>
+      <th>User Data</th>
+      <th><%=  link_to "Last Access", url_for(:controller => 'admin', :action => 'users_list', :order => 'last_access') %></th>
+      <th><%=  link_to "Session has Expired?", url_for(:controller => 'admin', :action => 'users_list', :order => 'session_expires') %> ('never'=user granted constant permission)</th>
+
+      <th><%=  link_to "Created at", url_for(:controller => 'admin', :action => 'users_list', :order => 'created_at') %></th>
+      <th><%=  link_to "Updated at", url_for(:controller => 'admin', :action => 'users_list', :order => 'updated_at') %></th>
+      <th></th>
+    </tr>
+
+    <% for user in @users %>
+      <tr>
+        <td>
+          <%= fb_profile_pic(user.uid, :facebook_logo => true) %><br>
+            <%=  link_to(fb_name(user.uid), user) unless user.signup_step == 0 %> <br />
+            <span style ="font-size: smaller;">C.Name: <br />
+            <%= user.cached_name %></span>
+        </td>
+        <td>
+          <fb:if-is-group-member gid="<%= ADMISSION_GROUP_GID -%>" uid="<%= user.uid %>">
+            Yes
+          <fb:else>
+            No, <%= link_to "invite", 'http://www.facebook.com/groups/edit.php?members&gid=5463607599' %>
+          </fb:else>
+          </fb:if-is-group-member>
+        </td>
+
+        <td>
+          <%= user.signup_step %>
+          <%= "(OUT: still have to choose the organisation)" if user.signup_step == 0 %>
+          <%= "(OUT: have choosen organisation, but have still to edit the profile and preferences - MAYBE not yet admitted to the Admission group)" if user.signup_step == 1 %>
+          <%= "(OUT: still have to edit the preferences)" if user.signup_step == 2 %>
+          <%= " - OK (but next time will be asked for permission)" if user.signup_step == 3 %>
+          <%= " - OK" if user.signup_step == 4 %>
+
+        </td>
+        <td>
+          <% if user.signup_step >= 3 %>
+            <%= link_to 'New Notification', "#{new_notification_path}?user_id=#{user.id}" %><br />
+            <%= "Email: yes<br />" unless user.email.nil? %>
+            <br />
+          <% end %>
+          <%= render_send_message(user) %><br />
+          <%= display_eventual_user_approve_form(user) %>
+        </td>
+        <td><%= link_to(user.organisation.short_name,user.organisation) unless user.organisation.blank? %></td>
+        <td>
+          <%= user_short_job(user) %>
+        </td>
+
+        <td><%= time_ago_in_words(user.last_access.to_date) %> ago</td>
+        <td>
+          <% if user.session_expires.nil? %>
+            never
+          <% else %>
+            <%= time_ago_in_words(user.session_expires.to_date) %> ago
+          <% end %>
+        </td>
+        <td><%= time_ago_in_words(user.created_at)  %> ago</td>
+        <td><%= time_ago_in_words(user.updated_at)  %> ago</td>
+        <td>
+          <%= link_to('Show', user)  unless user.signup_step == 0 %><br />
+          <% unless @current_user == user %>
+            <%= link_to 'Remove', user, :confirm => "Are you sure? you will also remove ALL HIS POSTS/CONTACTS/VISITS", :method => :delete %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>

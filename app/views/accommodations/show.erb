@@ -1,0 +1,63 @@
+<p>
+  <b>User:</b>
+  <%=h @accommodation.user_id %>
+</p>
+
+<p>
+  <b>Organisation:</b>
+  <%=h @accommodation.organisation_id %>
+</p>
+
+<p>
+  <b>Type:</b>
+  <%=h @accommodation.type %>
+</p>
+
+<p>
+  <b>Address:</b>
+  <%=h @accommodation.address %>
+</p>
+
+<p>
+  <b>City:</b>
+  <%=h @accommodation.city %>
+</p>
+
+<p>
+  <b>State:</b>
+  <%=h @accommodation.state %>
+</p>
+
+<p>
+  <b>Country:</b>
+  <%=h @accommodation.country %>
+</p>
+
+<p>
+  <b>Post Code:</b>
+  <%=h @accommodation.post_code %>
+</p>
+
+<p>
+  <b>Latitude:</b>
+  <%=h @accommodation.latitude %>
+</p>
+
+<p>
+  <b>Longitude:</b>
+  <%=h @accommodation.longitude %>
+</p>
+
+<p>
+  <b>Status:</b>
+  <%=h @accommodation.status %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%=h @accommodation.description %>
+</p>
+
+
+<%= link_to 'Edit', edit_accommodation_path(@accommodation) %> |
+<%= link_to 'Back', accommodations_path %>

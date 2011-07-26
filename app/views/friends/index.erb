@@ -1,0 +1,62 @@
+
+<br />
+<div style = "text-align:left;float:left;">
+  <h3>You have <%= link_to pluralize(@friend_uids_in_MM.size, 'friend'),
+                            search_url(:template => 'only_results', :clear_session => 'true', :filter_friendship => 'friends') -%>
+      in the <%= APPLICATION_NAME_WITH_STYLE %>:</h3>
+  <div class="menu"  >
+
+    <% if @friend_uids_in_MM.size > 0 %>
+
+    <% else   %>
+        <h3>Friends:</h3>
+    <% end %>
+
+    <br />
+      <% if @friend_uids_in_MM.size > 0 %>
+        <ul>
+          <li>
+            <%= link_to 'What are my friends doing?', :action => 'status' %>
+            <div class="descrip">
+              Have a look at <%= his_their(@friend_uids_in_MM.size) -%> latest Facebook posts.
+            </div>
+          </li>
+        </ul>
+
+         <ul>
+          <li>
+            <%= link_to 'Where are my friends?', search_url(:template => 'only_results', :output => 'map', :clear_session => 'true', :filter_friendship => 'friends') %>
+            <div class="descrip">
+              <%= link_to "View a Map of your friends' location", search_url(:template => 'only_results', :output => 'map', :clear_session => 'true', :filter_friendship => 'friends') %>.
+            </div>
+          </li>
+        </ul>
+
+      <% end %>
+
+      <ul>
+        <li>
+          <%= link_to 'Invite other friends', new_invitation_url %>
+          <div class="descrip">
+            Invite other <%= MAIN_ORG_SHORT_NAME %> friends to join the <%= APPLICATION_NAME_WITH_STYLE %>.
+          </div>
+        </li>
+      </ul>
+  </div>
+</div>
+
+<% if @friend_uids_in_MM.size > 0 %>
+  <div  style = "text-align:right;" >
+    <h3><%= APPLICATION_NAME_WITH_STYLE %> friends Chat</h3>
+  </div>
+  <div  style = "text-align:left;float:right;clear:right;">
+    <fb:chat-invite msg="Hi!"
+              condensed="false"
+              exclude_ids=<%= @friend_uids_not_in_MM.map {|ids| ids+','} unless @friend_uids_not_in_MM.nil? -%> />
+
+
+  </div>
+<% end %>
+
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />

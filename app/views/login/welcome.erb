@@ -1,0 +1,71 @@
+<div  style = "border:1px solid #BDC7D8;padding:4px; width: 300px; background:#fff9d7; float:right;">
+  Please note: this application is a DEMO installation of 
+  <%= link_to 'facebook4org', 'http://github.com/francescor/facebook4org' %>, the open source
+  facebook application for organisations.  Download it <%= link_to 'here', 'http://github.com/francescor/facebook4org' %>.
+</div>
+
+<p>Welcome to the <%= link_to APPLICATION_LONG_NAME.upcase,  APPLICATION_INFO_LINK -%></p>
+<br>
+<br>
+<br>
+<%= image_tag  'cr_logo_rgb_web_72-237x300_DEMO.jpg', :alt=> '   ', :height=>"150" , :style=>"float: left; margin-right: 15px; margin-bottom: 15px;"%>
+
+<p>
+
+  In the  <%= APPLICATION_NAME_WITH_STYLE -%> staff and volunteers working at cultural centres in the
+  <%= link_to "#{MAIN_ORG_NAME} (#{MAIN_ORG_SHORT_NAME})", MAIN_ORG_LINK %> network can connect and communicate
+  with each other.
+  All you need is a Facebook account.
+</p>
+
+
+<p>
+The  <%= APPLICATION_NAME_WITH_STYLE -%> will help you to: <br />
+&nbsp;&nbsp;&#8226; Find and meet new <%= MAIN_ORG_SHORT_NAME %> colleagues<br />
+<!-- &nbsp;&nbsp;&#8226; Offer to volunteer, intern or work at a TEH centre<br />  -->
+&nbsp;&nbsp;&#8226; Find volunteers, interns and workers<br />
+&nbsp;&nbsp;&#8226; Search for <%= MAIN_ORG_SHORT_NAME %> centres and people to visit<br />
+</p>
+
+<p>
+PLEASE NOTE: the <%= APPLICATION_NAME_WITH_STYLE -%> is a beta release, for testing
+by <%= link_to MAIN_ORG_NAME, MAIN_ORG_LINK %> people only. Other cultural organisations and networks can have their own
+version of the <%= APPLICATION_NAME %> for free since TEH has released its <a href='http://github.com/francescor/facebook4org'>open-source code</a>. 
+	Please look at the <a href='http://github.com/francescor/facebook4org#readme'>download page</a> or <%= link_to 'contact us', CONTACT_US_LINK  %> for more information.
+</p>
+
+<p>
+If you are not involved in <%= link_to MAIN_ORG_SHORT_NAME, MAIN_ORG_LINK %>, you are very welcome to use the other parts of
+the  <%= link_to TOOLKIT_NAME, TOOLKIT_LINK %>.<br />
+<br />
+
+This application is part of <%= link_to "CHANGING ROOM", 'http://www.teh.net/changingroom' %>: a pilot project by <%= link_to "Trans Europe Halles",  'http://www.teh.net' %>
+looking for new ways of stimulating cross-border mobility of cultural operators.
+
+</p>
+
+
+
+<style type="text/css">
+blockquote {
+  background:transparent url(http://www.facebook.com/images/start_quote_small.gif) no-repeat scroll -1px 0;
+  float: right;
+  color:#333333;
+  line-height:14px;
+  margin:14px 0;
+  padding:0 0 0 16px;
+ }
+blockquote span {
+  background:transparent url(http://www.facebook.com/images/end_quote_small.gif) no-repeat scroll right bottom;
+  padding:0 15px 0 0;
+ }
+</style>
+<blockquote>
+  <span>
+We must remember that<br>
+mobility is a need, not a luxury.  </span>
+  <br>
+  <div style="text-align: right;"><small><i>Petar Todorov,</i> TEH Executive Committee</small></div>
+</blockquote>
+
+<%= link_to (image_tag 'enter.png', :alt => '>Enter'), 'index' %>

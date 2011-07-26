@@ -1,0 +1,20 @@
+<h1>Editing individual_post_preferred_country</h1>
+
+<% form_for(@individual_post_preferred_country) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :individual_post_id %><br />
+    <%= f.text_field :individual_post_id %>
+  </p>
+  <p>
+    <%= f.label :country_id %><br />
+    <%= f.text_field :country_id %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @individual_post_preferred_country %> |
+<%= link_to 'Back', individual_post_preferred_countries_path %>

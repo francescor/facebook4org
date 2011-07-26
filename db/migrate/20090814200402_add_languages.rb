@@ -1,0 +1,45 @@
+class AddLanguages < ActiveRecord::Migration
+  def self.up
+    Language.delete_all
+    #    Language.create(:name => "",                  :locale            => "")
+    Language.create(:locale => "ca_ES",                 :name            => "Català")
+    Language.create(:locale => "cs_CZ",                 :name            => "Čeština")
+    Language.create(:locale => "da_DK",                 :name            => "Dansk")
+    Language.create(:locale => "de_DE",                 :name            => "Deutsch")
+    Language.create(:locale => "en_GB",                 :name            => "English (UK)")
+    Language.create(:locale => "en_US",                 :name            => "English (US)")
+    Language.create(:locale => "es_LA",                 :name            => "Español")
+    Language.create(:locale => "es_ES",                 :name            => "Español (España)")
+    Language.create(:locale => "fr_FR",                 :name            => "Français (France)")
+    Language.create(:locale => "hr_HR",                 :name            => "Hrvatski")
+    Language.create(:locale => "it_IT",                 :name            => "Italiano")
+    Language.create(:locale => "lt_LT",                 :name            => "Lietuvių")
+    Language.create(:locale => "hu_HU",                 :name            => "Magyar")
+    Language.create(:locale => "nl_NL",                 :name            => "Nederlands")
+    Language.create(:locale => "nb_NO",                 :name            => "Norsk (bokmål)")
+    Language.create(:locale => "pl_PL",                 :name            => "Polski")
+    Language.create(:locale => "pt_PT",                 :name            => "Português (Portugal)")
+    Language.create(:locale => "ro_RO",                 :name            => "Română")
+    Language.create(:locale => "ru_RU",                 :name            => "Русский")
+    Language.create(:locale => "sk_SK",                 :name            => "Slovenčina")
+    Language.create(:locale => "sl_SI",                 :name            => "Slovenščina")
+    Language.create(:locale => "fi_FI",                 :name            => "Suomi")
+    Language.create(:locale => "sv_SE",                 :name            => "Svenska")
+    Language.create(:locale => "el_GR",                 :name            => "Ελληνικά")
+    Language.create(:locale => "bg_BG",                 :name            => "Български")
+    Language.create(:locale => "sr_RS",                 :name            => "Српски")
+    Language.create(:locale => "eu_ES",                 :name            => "Euskara")
+    Language.create(:locale => "gl_ES",                 :name            => "Galego")
+    Language.create(:locale => "is_IS",                 :name            => "Íslenska")
+    Language.create(:locale => "lv_LV",                 :name            => "Latviešu")
+    Language.create(:locale => "nn_NO",                 :name            => "Norsk (nynorsk)")
+    Language.create(:locale => "fb_LT",                 :name            => "Leet Speak")
+    Language.create(:locale => "li_NL",                 :name            => "Limburgs")
+    Language.create(:locale => "mt_MT",                 :name            => "Malti")
+    Language.create(:locale => "nl_BE",                 :name            => "Nederlands (België)")
+    Language.create(:locale => "fb_FI",                 :name            => "Suomi (koe)")
+  end
+
+  def self.down
+  end
+end

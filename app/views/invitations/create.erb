@@ -1,0 +1,14 @@
+<br />
+<br />
+<br />
+<h1>Well done! Here are the friends you've invited:</h1>
+<br />
+<% for uid in @sent_to_ids %>
+  <%= fb_profile_pic uid %> <%= fb_name uid, :linked => false %>
+  <% @user =  User.find_by_uid(uid.to_i) %>
+  <% if @user %>
+    (btw, <%= link_to fb_name(uid, :linked => false), @user  %> is already using the <%= APPLICATION_NAME_WITH_STYLE %>)<br />
+  <% end %>
+  <br />
+  <br />
+<% end %>

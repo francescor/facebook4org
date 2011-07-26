@@ -1,0 +1,24 @@
+<h1>Editing organisation_post_spoken_language</h1>
+
+<% form_for(@organisation_post_spoken_language) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :organisation_post_id %><br />
+    <%= f.text_field :organisation_post_id %>
+  </p>
+  <p>
+    <%= f.label :language_id %><br />
+    <%= f.text_field :language_id %>
+  </p>
+  <p>
+    <%= f.label :rank %><br />
+    <%= f.text_field :rank %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @organisation_post_spoken_language %> |
+<%= link_to 'Back', organisation_post_spoken_languages_path %>

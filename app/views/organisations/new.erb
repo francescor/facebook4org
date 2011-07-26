@@ -1,0 +1,13 @@
+<h1>Enter details of the new organisation</h1>
+
+<br>
+<% facebook_form_for(@organisation, :labelwidth => "250") do |f| %>
+  <%= f.error_messages %>
+
+   <%= render :partial => 'form', :locals => { :f => f }  %>
+
+  <p>
+    <%= f.buttons 'Create' %>
+  </p>
+
+<% end %>

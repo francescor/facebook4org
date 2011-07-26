@@ -1,0 +1,28 @@
+<table border="0" width ="100%" >
+  <tr>
+    <td valign="top" >
+      <h2>Feedback</h2>
+      <br />
+      <strong>Your feedback is extremely important!</strong><br />
+      <br />
+      Use this page to post your feedback: it will help to identify what is missing,<br />
+      where the <%= APPLICATION_NAME_WITH_STYLE -%> can be improved, bugs, and so on,<br />
+      ...or just post a suggestion.<br />
+      <br />
+    </td>
+    <td valign="top" align="right" height="180">
+      <%= image_tag 'feedback.jpg', :alt => '' %>
+    </td>
+  </tr>
+</table>
+
+<fb:comments xid="<%= controller.controller_name %>.<%= controller.action_name %>"
+             canpost="true"
+             <% if  @current_user.is_admin %>
+               candelete="true"
+             <% else %>
+               candelete="false"
+             <% end %>
+             publish_feed="false"
+             send_notification_uid="<%= FACEBOOK_ID_OF_THE_FB_USER_WHO_WILL_RECEIVE_FB_COMMENTS_NOTIFICATION -%>">
+</fb:comments>

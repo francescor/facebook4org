@@ -1,0 +1,66 @@
+<%= render :partial => '/admin/menu' %>
+
+<h2>Listing Notifications</h2>
+<p>
+<br />
+Notifications <b>created for specific users</b> will be visible by them when they clic on the 'Notifications' in the menu, while notifications with no users will be visible to everybody.<br />
+They are automatically created on same events, and are send automatically by email to users who have decided to receive them in their email (montly, weekly, daily or as soon as they are created),
+and are automatically deleted when they are too old.<br />
+As an admin you can <%= link_to 'create a new notification manually', new_notification_path %>, or edit/remove them.
+</p>
+<br />
+<br />
+
+<table border=0 cellpadding =" 9" >
+  <tr>
+    <td>
+      <form action="" method="get">
+        Show  Notifications for: <%= select '',:user_id, @options_for_select_with_all, :selected => @selected_options %> <%= submit_tag 'Show' %>
+      </form>
+    </td>
+    <td>
+      <span style ="color: gray;"
+        <form action="my_notifications" method="get">
+          Jump to the Notification page for: <%= select '',:id, @options_for_select, :selected => @selected_options  %> <%= submit_tag 'Jump' %>
+        </form>
+      </span>
+    </td>
+  </tr>
+</table>
+<br />
+<br />
+<% if @notifications.empty? %>
+  <i>
+    <% if @user %>
+      No notifications for <%= @user.cached_name %> are presents (user will see only notifications created for <b>all</b> users)
+    <% else %>
+      No notifications for all users
+    <% end %>
+  </i>
+<% else %>
+  <% if @user %>
+    Notifications specific for <%= @user.cached_name %>
+  <% else %>
+    <b>Notifications for all users</b>
+  <% end %>
+  <br /><br />
+  <table cellpadding="3" cellpadding="4" border ="1">
+    <tr>
+      <th>Message</th>
+      <th>Date</th>
+      <th>&nbsp;</th>
+    </tr>
+
+  <% @notifications.each do |notification| %>
+    <tr>
+      <td><%= notification.message %></td>
+      <td><div class = "small_and_light_note" > <%= time_ago_in_words(notification.date) %> ago</div></td>
+      <td>
+        <%= link_to 'Edit', edit_notification_path(notification) %>  
+        <%= link_to 'Remove', notification, :confirm => 'Are you sure?', :method => :delete %>
+      </td>
+    </tr>
+  <% end %>
+  </table>
+<% end %>
+

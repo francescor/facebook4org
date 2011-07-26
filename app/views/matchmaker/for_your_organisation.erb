@@ -1,0 +1,22 @@
+<%= render :partial => 'menu' %>
+<br />
+<h2>For your organisation</h2>
+<br />
+
+<div class="menu">
+  People for your organisation: <br />
+  <ul>
+    <li>
+      <%= link_to 'Look at volunteers', @users_volunteers_url %>
+      <div class="descrip">Does <%=  @current_user.organisation.short_name %> need short or mid-term assistance?
+        There are <b><%= @users_volunteers.size %></b> people offering themselves as volunteers! <%= link_to 'Have a look', @users_volunteers_url %>: there's maybe someone suitable looking for experience..
+      </div>
+    </li>
+    <li>
+      <%= link_to 'Write an offer', new_organisation_post_url %>
+      <div class="descrip">Have people contact you directly by posting offers for an exchange, for volunteers, interns or workers.
+      </div>
+    </li>
+  </ul>
+</div>
+

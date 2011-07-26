@@ -1,0 +1,17 @@
+<h1>Invite your friends</h1>
+<p>In this page you can invite your friends to the <%= APPLICATION_NAME_WITH_STYLE %>.
+</p>
+<p>As you know, access to the <%= APPLICATION_NAME_WITH_STYLE %> is reserved to <%= MAIN_ORG_SHORT_NAME %> people,
+  so we ask you to be selective, and send invitations <strong><i>only</i> to people involved in your or other
+<%= MAIN_ORG_SHORT_NAME %> organisations.</strong>
+</p>
+<i>To prevent spamming, there is a limit on the number of friends you can invite per day to the <%= APPLICATION_NAME_WITH_STYLE %>.</i>
+<br>
+<fb:add-section-button section="profile" />
+<% fb_multi_friend_request(APPLICATION_NAME, "Invite your #{MAIN_ORG_SHORT_NAME} friends to use the #{APPLICATION_NAME}.", invitations_path) do %>
+  The <%= APPLICATION_NAME.upcase %> is a tool created by <%= MAIN_ORG_NAME %> for individuals and organisations within <%= MAIN_ORG_SHORT_NAME %> to
+    find colleagues and friends, and form new partnerships and exchanges.
+    Access to the <%= APPLICATION_NAME.upcase %> is by invitation, and you're just receiving one.
+    <%= fb_req_choice("Enter the #{APPLICATION_NAME}!", # there is a limit of 20 Chars. Anything else is truncated.
+      home_url(:from =>@current_user.id.to_s, :canvas=>true)) %>
+<% end %>

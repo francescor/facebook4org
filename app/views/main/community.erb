@@ -1,0 +1,17 @@
+
+<h1>Users list</h1>
+
+<table cellpadding="3" cellspacing="1" border ="0">
+
+  <% for user in @users %>
+    <tr>
+      <td>
+          <%= fb_profile_pic(user.uid, :linked => false) %>
+          <%= fb_name(user.uid) %><br>
+          <%= user.job_role_in_words+' ('+user.job_area_in_words+') <br>' unless user.job_role.nil? %>
+          <%= link_to(user.organisation.short_name, user.organisation ) %><br>
+          <%= user.country %>
+      </td>
+    </tr>
+  <% end %>
+</table>

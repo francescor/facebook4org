@@ -1,0 +1,22 @@
+<h1>Listing individual_post_preferred_countries</h1>
+
+<table>
+  <tr>
+    <th>Individual post</th>
+    <th>Country</th>
+  </tr>
+
+<% @individual_post_preferred_countries.each do |individual_post_preferred_country| %>
+  <tr>
+    <td><%=h individual_post_preferred_country.individual_post_id %></td>
+    <td><%=h individual_post_preferred_country.country_id %></td>
+    <td><%= link_to 'Show', individual_post_preferred_country %></td>
+    <td><%= link_to 'Edit', edit_individual_post_preferred_country_path(individual_post_preferred_country) %></td>
+    <td><%= link_to 'Remove', individual_post_preferred_country, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New individual_post_preferred_country', new_individual_post_preferred_country_path %>

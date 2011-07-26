@@ -1,0 +1,180 @@
+<h1>Offers by Organisations</h1>
+<br />
+
+
+
+<div style="float: right; clear: right;">Is <%= @current_user.organisation.short_name.upcase %> searching for people? <br>
+  <%= link_to 'Write an offer',  new_organisation_post_url  %> <!-- note: don't use button_to here or else you'll create an empty post -->
+<br>
+</div>
+
+<a href="#" id="Show_search_options" clicktohide="Show_search_options, show_text" clicktoshow="Search_form, AdvancedSearch" <%= "style='display:none'" if  @selected_template != 'only_results' -%> >
+      Show filters options for these results
+</a>
+<br />
+<div id="Search_form" <%= "style='display:none'" if  @selected_template == 'only_results' -%> >
+  <% form_tag @wanted_action do %>
+
+    <%# FILTER BY %>
+
+    <strong>Search </strong> <%= select_tag 'filter', options_for_select(@filter_options_for_select, @selected_filter) %>
+
+    <div id="AdvancedSearch" <%= "style='display:none'" if  @selected_template != 'advanced' -%> >
+      <br>
+      <br>
+      <strong>from...</strong><br>
+      <br>
+      <%# FILTER BY ORG %>
+      <%= strong_if "Organisation:", !@selected_organisation.blank? %>
+      <%= select_tag 'filter_organisation', options_for_select(@filter_organisation_options_for_select, @selected_organisation) %>
+      <br>
+
+      <%# FILTER BY COUNTRY %>
+      <%= strong_if "Country:", !@selected_country.blank? %>
+      <%= select_tag 'filter_country', options_for_select(@filter_country_options_for_select, @selected_country) %>
+      <br>
+
+      <%# FILTER BY Preferences for exchanges %>
+      <%= strong_if "Preferences for role:", !@selected_category.blank? %>
+      <%= select_tag 'filter_category', options_for_select(@filter_category_options_for_select, @selected_category) %>
+      <br>
+
+      <%# FILTER BY Preferences for exchanges %>
+      <%= strong_if "Area:", !@selected_area.blank? %>
+      <%= select_tag 'filter_area', options_for_select(@filter_area_options_for_select, @selected_area) %>
+      <br>
+
+      <%# FILTER BY Preferences for exchanges %>
+      <%= strong_if "Duration:", !@selected_duration.blank? %>
+      <%= select_tag 'filter_duration', options_for_select(@filter_duration_options_for_select, @selected_duration) %>
+      <br>
+
+      <%# FILTER BY Geo proximity %>
+      <% if @selected_close_to_loc.blank? %>
+        Located near the city:
+      <% else %>
+        <%= strong_if "Located up to ", !@selected_close_to_km.blank? %>
+        <%= select_tag 'filter_close_to_km', options_for_select(@filter_close_to_km_options_for_select, @selected_close_to_km) %>
+        <%= strong_if "km from the city of: ", !@selected_close_to_loc.blank? %>
+      <% end %>
+      <%=  text_field_tag 'filter_close_to_loc', h(@selected_close_to_loc), :size => 35, :maxlength=> 50   %> <small>i.e. <em>"Paris"</em> or <em>"Oxford, Ireland"</em> </small>
+      <br>
+
+      <br>
+      Post per page:
+      <%= select_tag 'per_page', options_for_select(@per_page_for_select, @selected_per_page) %>
+      <br>
+      <br>
+    </div>
+    <%= submit_tag 'Search' %>&nbsp;
+    <a id="show_text" href="#" clicktohide="show_text" clicktoshow="AdvancedSearch" <%= "style='display:none'" if  @selected_template == 'advanced' -%> >
+      Advanced search
+    </a>
+    <br>
+  <% end %>
+</div>
+<br>
+
+<% if params[:reset] == 'all' %>
+<!-- starting empty search NO OUTPUT -->
+<% elsif @no_results%>
+  <br>
+  <br>
+  <i><strong>Your search did not match anything</strong></i>
+<% else %>
+
+
+  <div id="List" <%= 'style="display:none"' if @selected_output == 'map' -%> >
+    <a href="#" clicktotoggle="Map,List"><%=  image_tag('map.gif', :alt => 'Show Map', :title => 'Show Map') %></a>
+    <% if @item_total > 2 %>
+      <%#= SORT %>
+      <br>
+      <div style = "text-align:right;" >
+        <% form_tag @search_action do %>
+          <%# SORT %>
+          Sort by <%= select_tag 'order', options_for_select(@order_options_for_select, [@selected_order]) %>
+          <%= submit_tag 'Sort' %>
+        <% end %>
+      </div>
+    <% end  %>
+
+    <% if @item_total > 1 %>
+      <%=  "Results #{@item_start} - #{@item_end} of a total of <strong>#{@item_total}</strong>" %>
+    <% elsif @item_total == 1 %>
+      Results: <strong>1</strong>
+    <% end %>
+
+
+    <%#= TABLE %>
+    <div style = "text-align:center;" >
+      <%= will_paginate @page_results, :container => false %>
+    </div>
+    <br>
+
+    <table width="100%" border="1" cellspacing ="0" cellpadding ="6">
+      <tr>
+        <th>Organisation</th>
+        <th>is looking for</th>
+        <th>Area</th>
+        <th>When</th>
+        <th>Duration</th>
+        <th>Description</th>
+        <th>Created by</th>
+        <th>&nbsp;</th>
+
+      </tr>
+
+      <% @page_results.each do |organisation_post| %>
+        <tr>
+          <td>
+            <strong><%= organisation_post.organisation.short_name %></strong><br />
+            <%=h organisation_post.organisation.country %> - <%=h organisation_post.organisation.city %>
+              <% unless @location.nil? %>
+              <br>
+              <small><b><%= organisation_post.organisation.distance_from(@location).round -%> km away</b> from <br><%= truncate(@location.full_address, 18) -%>.</small>
+              <br>
+              <%= link_to "Get directions",
+                          "http://maps.google.com/maps?f=d&source=s_d&saddr=#{u(@location.city.to_s+', '+@location.country.to_s)}&daddr=#{u(organisation_post.organisation.address)}",
+                          :target => '_blank' %>
+            <% end %>
+          </td>
+          <td><strong><%=h organisation_post.category %></strong></td>
+          <td><%=h organisation_post.area_in_words %></td>
+          <td><%=h organisation_post.when_in_words %></td>
+          <td><%=h organisation_post.duration_in_words %></td>
+          <td>
+            <%=h organisation_post.short_description %><br />
+            <%=h truncate(organisation_post.description, :length => 35) %><br/><%= link_to 'read more', organisation_post -%></td>
+          <td>
+            Created by
+            <%=  link_to fb_name(organisation_post.user.uid, :capitalize => true), organisation_post.user -%>,
+            <%=h time_ago_in_words(organisation_post.updated_at) %> ago.
+          </td>
+          <td>
+            <% if organisation_post.user == @current_user %>
+              <%= link_to 'Edit', edit_organisation_post_path(organisation_post) %><br>
+              <%= link_to 'Remove', organisation_post, :confirm => 'Are you sure?', :method => :delete %><br>
+            <% end %>
+            <%= link_to 'Show', organisation_post %><br />
+          </td>
+        </tr>
+      <% end %>
+    </table>
+    <br>
+    <div style = "text-align:center;" >
+      <%= will_paginate @page_results, :container => false %>
+    </div>
+  </div><!-- list -->
+
+  <%#= MAP %>
+  <div id="Map" <%= 'style="display:none"' if @selected_output == 'list' -%> >
+  </div>
+  <a href="#" clicktotoggle="Map,List"><%=  image_tag('list.png', :alt => 'Show List', :title => 'Show List') %></a>
+  <br />
+  <br />
+  <fb:iframe src="<%= @url_for_iframe -%>" width="610" height="404" scrolling="no" >
+  </fb:iframe>
+
+<% end # params[:reset]%>
+
+

@@ -1,0 +1,50 @@
+<fb:fbml version="1.1">
+
+  <link rel="stylesheet" type="text/css" media="screen" href="<%=  stylesheet_path 'base' %>" />
+
+
+
+  <% if we_can_show_the_menu %>
+    <% fb_dashboard do %>
+      <%= fb_action 'Home', home_url %>
+      <%= fb_action 'My Matches', :controller => 'matchmaker' %>
+      <%= fb_action 'Search', search_url(:reset => 'all', :template => 'basic', :output => 'list', :show_quick_search => 'yes')%>
+      <%= fb_action 'Offers', wanted_url(:template => 'basic', :output => 'list', :clear_session => true) %>
+      <%= fb_action "Notifications#{' ('+@current_user.notifications_unread.size.to_s+')' unless @current_user.notifications_unread.empty? }", :controller => 'main', :action => 'my_notifications', :id => nil %>
+      <%= fb_action 'Message Board', :controller => 'main', :action => 'message_board' %>
+      <%= fb_action 'Friends', :controller => 'friends', :action => 'index' %>
+      <%= fb_action 'My Settings', settings_url %>
+
+      <% if @current_user.is_admin %>
+        <%= fb_action 'Admin', :controller => "admin" %>
+      <% end %>
+      <!-- <%= fb_help "About", 'http://www.facebook.com/apps/application.php?v=info&id=216038255084' %>-->
+       <%= fb_help "Feedback", :controller => 'main', :action => 'feedback' %>
+    <% end %>
+  <% elsif @current_user.is_pending %>
+    <% fb_dashboard do %>
+      <%= fb_action 'Home', :controller => 'main', :action => 'index_for_pending_users' %>
+      <%= fb_action 'My Settings', settings_url %>
+    <% end %>
+  <% else  %>
+    <h1><%= image_tag  'cr_logo_16px.png', :alt=> 'Logo ' %> <%= APPLICATION_LONG_NAME %></h1>
+    <!--
+    <fb:header>
+      <%= APPLICATION_LONG_NAME %>
+    </fb:header>
+    -->
+  <% end %>
+
+  <% unless facebook_messages.blank? %>
+   <br />
+   <%=  facebook_messages %>
+   <br />
+  <% end %>
+
+  <%= yield %>
+
+  <br />
+  <br />
+  <br />
+  <big>PLEASE NOTE: THIS SITE IS A DEMO WEBSITE</big>
+</fb:fbml>

@@ -1,0 +1,22 @@
+<p>
+<br/>
+<br/>
+
+
+ <fb:editor action="update_org" labelwidth="300" >
+  <%= hidden_field_tag('cached_name', '<fb:name uid="12345" />')  %>
+    <fb:editor-custom label='Select the <%= MAIN_ORG_SHORT_NAME -%> cultural organisation you work for or are involved with'>
+      <%= select 'organisation', 'organisation_id', @organisations_type %> <br/>
+    </fb:editor-custom>
+    <fb:editor-buttonset>
+      <fb:editor-button value="Continue"/>
+    </fb:editor-buttonset>
+
+ </fb:editor>
+
+<br/>
+<br/>
+<small><%= "Your organisation is not listed here? Contact #{MOSNL} to add it<br> " -%></small>
+<br/>
+<br/>
+</p>

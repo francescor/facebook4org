@@ -1,0 +1,40 @@
+
+
+<% if params[:ref] == 'bookmarks' %>
+  <h3>Welcome back, <%= fb_name(@current_user.uid, :firstnameonly => true, :useyou => false, :linked => false) %>!</h3>
+  <br />
+<%  end %>
+
+<% if @user == @current_user %>
+  <h3>My Notifications</h3>
+  <br />
+
+  <span class ="light_note">
+    This page shows what recently happened in the <%= APPLICATION_NAME_WITH_STYLE  %> (view your <%= link_to "preferences for notification", edit_notification_preferences_path %>)
+  </span>
+<% else %>
+  <h3>Notification page for: <%= link_to @user.cached_name, @user %></h3>
+<% end %>
+
+<br />
+<br />
+
+<% if @notifications.empty? %>
+  <i>No notifications yet.</i>
+<% else %>
+  <ul class="uiList pvm">
+    <% @notifications.each do |notification| %>
+      <li class="pts notification notif_19675640871 notif_6548344614 uiListItem uiListLight">
+        <%  if (notification.user == @current_user and !notification.read) %>
+          <% notification.update_attribute(:read, true) %>
+          <span style ="font-weight: bold;">
+        <% else %>
+          <span>
+        <% end %>
+        <%= notification.message %>   <span class = "small_and_light_note" > <%= time_ago_in_words(notification.date) %> ago</span><br />
+        </span>
+
+      </li>
+    <% end %>
+  </ul>
+<% end %>

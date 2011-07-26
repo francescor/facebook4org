@@ -1,0 +1,157 @@
+<%= render :partial => 'search_menu' %>
+<br />
+
+<a href="#" id="Show_search_options" clicktohide="Show_search_options, show_text" clicktoshow="Search_form, AdvancedSearch" <%= "style='display:none'" if  @selected_template != 'only_results' -%> >
+      Show filters options for these results
+</a>
+
+<br />
+
+<div id="Search_form" <%= "style='display:none'" if  @selected_template == 'only_results' -%> >
+
+  <% form_tag @search_action do %>
+
+    <%# FILTER BY %>
+
+    <strong>Search</strong> <%= select_tag 'filter', options_for_select(@filter_options_for_select, @selected_filter) %>
+
+
+
+    <div id="AdvancedSearch" <%= "style='display:none'" if  @selected_template != 'advanced' -%> >
+      <br />
+      <br>
+      <strong>with...</strong><br>
+
+
+      <br>
+      <%# FILTER BY ORG %>
+      <%= strong_if "Select Organisation:", !@selected_organisation.blank? %>
+      <%= select_tag 'filter_organisation', options_for_select(@filter_organisation_options_for_select, @selected_organisation) %>
+      <br>
+
+      <br>
+      <%# FILTER BY NAME %>
+      or type its <%= strong_if "Name (or part of it): ", !@selected_name.blank? %>
+      <%= text_field_tag 'filter_name', h(@selected_name), :size => 20, :maxlength=> 30   %>
+      <br>
+
+
+      <%# FILTER BY COUNTRY %>
+      <%= strong_if "Country:", !@selected_country.blank? %>
+      <%= select_tag 'filter_country', options_for_select(@filter_country_options_for_select, @selected_country) %>
+      <br>
+
+      <%# FILTER BY Geo proximity %>
+      <% if @selected_close_to_loc.blank? %>
+        Located near the city:
+      <% else %>
+        <%= strong_if "Located up to ", !@selected_close_to_km.blank? %>
+        <%= select_tag 'filter_close_to_km', options_for_select(@filter_close_to_km_options_for_select, @selected_close_to_km) %>
+        <%= strong_if "km from the city of: ", !@selected_close_to_loc.blank? %>
+      <% end %>
+      <%=  text_field_tag 'filter_close_to_loc', h(@selected_close_to_loc), :size => 35, :maxlength=> 50   %> <small>i.e. <em>"Paris"</em> or <em>"Oxford, Ireland"</em> </small>
+      <br>
+
+      <br>
+      Organisations per page:
+      <%= select_tag 'per_page', options_for_select(@per_page_for_select, @selected_per_page) %>
+      <br>
+      <br>
+      <br />
+
+    </div>
+
+    <%= submit_tag 'Search' %>&nbsp;
+    <a id="show_text" href="#" clicktohide="show_text" clicktoshow="AdvancedSearch" <%= "style='display:none'" if  @selected_template == 'advanced' -%> >
+      Advanced search
+    </a>
+    <!--
+    <a id="hide_text" href="#" clicktohide="AdvancedSearch, hide_text" clicktoshow="show_text"  <%= "style='display:none'" if  @selected_template != 'advanced' -%> >
+      Basic Search
+    </a>
+    -->
+    <br>
+  <% end %>
+</div>
+
+<br>
+
+<% if params[:reset] == 'all' %>
+  <!-- starting empty search NO OUTPUT -->
+<% elsif @no_results%>
+  <br>
+  <br>
+  <i><strong>Your search did not match anything</strong></i>
+<% else %>
+
+  <%#= LIST %>
+  <div id="List" <%= 'style="display:none"' if @selected_output == 'map' -%> >
+    <a href="#" clicktotoggle="Map,List"><%=  image_tag('map.gif', :alt => 'Show Map', :title => 'Show Map') %></a>
+    <% if @item_total > 2 %>
+      <%#= SORT %>
+      <br>
+      <div style = "text-align:right;" >
+        <% form_tag @search_action do %>
+          <%# SORT %>
+          Sort by <%= select_tag 'order', options_for_select(@order_options_for_select, [@selected_order]) %>
+          <%= submit_tag 'Sort' %>
+        <% end %>
+      </div>
+    <% end  %>
+
+    <% if @item_total > 1 %>
+      <%=  "Results #{@item_start} - #{@item_end} of a total of <strong>#{@item_total}</strong>" %>
+    <% elsif @item_total == 1 %>
+      Results: <strong>1</strong>
+    <% end %>
+
+
+    <%#= TABLE %>
+    <div style = "text-align:center;" >
+      <%= will_paginate @page_results, :container => false %>
+    </div>
+    <br>
+    <table width="100%" border="1" cellspacing ="0" cellpadding ="6">
+      <tr>
+        <th>Name</th>
+        <th>Location</th>
+        <th>Homepage</th>
+        <th><%= MAIN_ORG_SHORT_NAME %> Membership</th>
+      </tr>
+
+      <% @page_results.each do |organisation| %>
+        <tr>
+          <td><strong><%=  link_to organisation.short_name, organisation %></strong></td>
+          <td>
+            <%=h organisation.city %> <br /> <strong><%=h organisation.country %></strong>
+            <% unless @location.nil? %>
+              <br>
+              <small><b><%= organisation.distance_from(@location).round -%> km away</b> from <br><%= truncate(@location.full_address, 18) -%>.</small>
+              <br>
+              <%= link_to "Get directions",
+                          "http://maps.google.com/maps?f=d&source=s_d&saddr=#{u(@location.city.to_s+', '+@location.country.to_s)}&daddr=#{u(organisation.address)}",
+                          :target => '_blank' %>
+            <% end %>
+          </td>
+          <td><%= (link_to organisation.homepage, 'http://'+organisation.homepage, :target => '_blank') unless organisation.homepage.blank? %></td>
+          <td><%= organisation.teh_membership.capitalize %></td>
+        </tr>
+      <% end %>
+    </table>
+    <br>
+    <div style = "text-align:center;" >
+      <%= will_paginate @page_results, :container => false %>
+    </div>
+  </div><!-- list -->
+
+  <%#= MAP %>
+  <div id="Map" <%= 'style="display:none"' if @selected_output == 'list' -%> >
+  </div>
+  <a href="#" clicktotoggle="Map,List"><%=  image_tag('list.png', :alt => 'Show List', :title => 'Show List') %></a>
+  <br />
+  <br />
+  <fb:iframe src="<%= @url_for_iframe -%>" width="610" height="404" scrolling="no" >
+  </fb:iframe>
+
+<% end %><!-- if params[:reset] == 'all' -->
+

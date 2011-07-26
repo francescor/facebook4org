@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  organisation_post_id: 1
+  language_id: 1
+  rank: 1
+
+two:
+  organisation_post_id: 1
+  language_id: 1
+  rank: 1

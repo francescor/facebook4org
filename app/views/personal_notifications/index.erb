@@ -1,0 +1,43 @@
+<%= render :partial => '/admin/menu' %>
+
+<h1>Listing Personal Notifications</h1>
+<br />
+Personal notifications are <b>created for specific users</b>. They can see them when they clic on the 'Notifications' tab in the menu. <br />
+They are automatically created on same events, and are send automatically by email to users who have decided to receive them in their email (montly, weekly, daily or as soon as they are created),
+and are automatically deleted when they are too old.<br />
+As an admin you can <%= link_to 'create a new personal notification manually', new_personal_notification_path %>, or edit/remove them.
+
+<br />
+<br />
+<form action="" method="get">
+  Show Personal Notifications for: <%= select '',:user_id, @options_for_select, :selected => @user.id  %> <%= submit_tag 'Show' %>
+</form>
+<br />
+<form action="notifications" method="get">
+  Show Personal & General Notifications (the Notification page) for: <%= select '',:id, @options_for_select, :selected => @user.id  %> <%= submit_tag 'Show' %>
+</form>
+<br />
+<br />
+<% if @personal_notifications.empty? %>
+<b>no personal notifications for  <%= @user.cached_name %></b>
+<% else %>
+  <table cellpadding="3" cellpadding="4" border ="1">
+    <tr>
+      <th>Message</th>
+      <th>Date</th>
+      <th>&nbsp;</th>
+    </tr>
+
+  <% @personal_notifications.each do |personal_notification| %>
+    <tr>
+      <td><%= personal_notification.message %></td>
+      <td><div class = "small_and_light_note" > <%= time_ago_in_words(personal_notification.date) %> ago</div></td>
+      <td>
+        <%= link_to 'Edit', edit_personal_notification_path(personal_notification) %> | 
+        <%= link_to 'Remove', personal_notification, :confirm => 'Are you sure?', :method => :delete %>
+      </td>
+    </tr>
+  <% end %>
+  </table>
+<% end %>
+

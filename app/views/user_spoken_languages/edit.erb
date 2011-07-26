@@ -1,0 +1,24 @@
+<h1>Editing user_spoken_language</h1>
+
+<% form_for(@user_spoken_language) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :user_id %><br />
+    <%= f.text_field :user_id %>
+  </p>
+  <p>
+    <%= f.label :language_id %><br />
+    <%= f.text_field :language_id %>
+  </p>
+  <p>
+    <%= f.label :rank %><br />
+    <%= f.text_field :rank %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @user_spoken_language %> |
+<%= link_to 'Back', user_spoken_languages_path %>

@@ -1,0 +1,168 @@
+
+    <%#= MAP %>
+    <br>
+    <br>
+    <table border="0">
+        <tbody>
+          <tr>
+            <td style ="width: 50%;">
+              <h1><%=h @organisation.name %></h1>
+              <br>
+              <% unless @organisation.image_link.blank? %>
+                  <%= image_tag "http://#{@organisation.image_link}", :alt => '' %>
+                <% end %>
+              <br>
+              <br>
+              <% if @current_user.is_admin || (@current_user.organisation == @organisation) %>
+                <%= link_to 'Edit', edit_organisation_path(@organisation) %>
+              <% end %>
+              <p>
+                Name:       <b><%=h @organisation.name %></b><br />
+                Short Name: <b><%=h @organisation.short_name %></b><br />
+                City:       <b><%=h @organisation.city %></b><br />
+                Street:     <b><%=h @organisation.street %></b><br />
+                <%=  "Post Code: <b>#{h @organisation.post_code}</b><br />" unless @organisation.post_code.blank? %>
+                <%=  "Region:    <b>#{h @organisation.state}    </b><br />" unless @organisation.state.blank? %>
+                Country:    <b><%=h @organisation.country %> </b><br />
+                <%= link_to  "View information about #{@organisation.country} in the KnowledgeBase", "http://changingroom.teh.net/wiki/index.php/Rough_guide_#{@organisation.country}", {:target => '_blank'} %> <%= show_rough_guide_icon(@organisation.country) %><br />
+                <br />
+                
+                <% unless @organisation.homepage.blank? %>
+                  Homepage:
+                  <b><%= link_to @organisation.homepage, "http://#{@organisation.homepage}", :target => '_blank' %></b><br />
+                <% end %>
+
+                <% unless @organisation.facebook_link.blank? %>
+                  <%= link_to "#{@organisation.short_name.capitalize} in Facebook", "http://#{@organisation.facebook_link}", :target => '_blank' %><br />
+                <% end %>
+                
+
+                <% unless @organisation.teh_link.blank? %>
+                  <%= link_to "More details in the #{@organisation.short_name} page in #{MAIN_ORG_SHORT_NAME} website", "http://#{@organisation.teh_link}", :target => '_blank' %><br />
+                <% end %>
+
+                <% unless @organisation.teh_membership.blank? %>
+                  <%= MAIN_ORG_SHORT_NAME %> Membership:
+                  <b><%= @organisation.teh_membership %></b>
+                  <br />
+                <% end %>
+
+
+
+              </p>
+
+            </td>
+            <td style = "text-align:right;" >
+              <% unless @organisation.lat == 0 || @organisation.lng == 0  %>
+                <fb:iframe src="<%= @url_for_iframe -%>" width="336" height="290" scrolling="no" >
+                </fb:iframe>
+              <% end %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+<br />
+
+<br />
+
+<p>
+
+<% if @organisation.visits.empty? %>
+  <!-- Nobody visited <b><%=h @organisation.short_name %></b> yet.<br /> -->
+<% else %>
+  People who visited <b><%=h @organisation.short_name %>:</b><br />
+  <% @organisation.visits.sort_by {|visit| visit.when}.each do |visit| %>
+    <% if visit.user == @current_user %>
+      You, 
+      <% if visit.when.to_time > Time.now()  %>
+        <%= link_to "[ERROR: you've set a date in the future! please correct]. Visit description: "+visit.description.to_s,  :controller => 'visits', :action => 'edit', :id => visit %>
+      <% else %>
+        <%= link_to time_ago_in_words(visit.when)+' ago: '+visit.description.to_s,  {:controller => 'visits', :action => 'edit', :id => visit}, :title => 'Click to edit' %>
+      <% end  %>
+      <br />
+      <% @new_visit_text =  'I was there again' %>
+    <% else %>
+      <%= link_to fb_name(visit.user.uid, :linked => false, :capitalize => true),  visit.user %>, <%= time_ago_in_words(visit.when)+' ago: '+visit.description %><br />
+    <% end %>
+  <% end %>
+<% end %>
+</p>
+
+<% if @current_user.organisation != @organisation %>
+
+    <p>
+      <a id="I_was_there_button"
+         href="#"
+         clicktoshow="Visit_form"
+         clicktohide="I_was_there_button" >
+         <%= button_to @new_visit_text || 'I was there' %>
+      </a>
+    </p>
+
+
+  <div id="Visit_form" style="display:none">
+    <% form_for(@visit) do |f| %>
+      <%= f.error_messages %>
+      <p>
+        <%= f.label :when, 'When' %><br />
+        <%= f.date_select :when, :order => [:day, :month, :year],:start_year => Time.now.year-30, :end_year => Time.now.year %>
+        <br />
+        <%= f.label :description %> <small>(how long? reason?...)</small><br />
+        <%= f.text_field :description, :size => 40, :maxlength=> 60 %>
+
+        <%= f.hidden_field :organisation_id, :value => @organisation.id %>
+        <br />
+        <%= f.submit 'Save' %>
+        <a id="hide_text"
+           href="#"
+           clicktohide="Visit_form"
+           clicktoshow="I_was_there_button">
+        Cancel
+        </a>
+
+      </p>
+    <% end %>
+  </div>
+
+<% end %>
+<br />
+<hr>
+
+<% unless @organisation.organisation_posts.empty?  %>
+  <h1>Offers from <%=h @organisation.name %></h1>
+  <br />
+  <% @organisation.organisation_posts.each do |organisation_post| %>
+    <%= link_to organisation_post.category, organisation_post %> (area: <%= organisation_post.area_in_words -%>) <br />
+  <% end %>
+  <br />
+<% end %>
+
+<% if  @current_user.organisation == @organisation  %>
+  <strong> Is <%=h @organisation.short_name %> searching for people? </strong>
+  <%= link_to 'Write an offer',  new_organisation_post_url %>
+  <br />
+<% end %>
+<br />
+
+<h1>People from <%=h @organisation.name %></h1>
+<br />
+<% if @organisation_users.size == 0  %>
+...nobody yet
+<% else %>
+  <table cellpadding="3" cellspacing="1" border ="0">
+    <% for user in @organisation_users %>
+      <tr>
+        <td>
+          <%= link_to fb_profile_pic(user.uid, :linked => false), user %><br>
+          <%= link_to fb_name(user.uid, :capitalize => true,  :linked => false), user -%><br />
+          <%= display_short_eventual_pending_status_for_user(user) %><br />
+          <%= user_short_job(user)%><br />
+          <%= render_is_your_friend_or_add_as_friend(user) %>
+          <%= render_send_message(user) %>
+          <br />
+        </td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>

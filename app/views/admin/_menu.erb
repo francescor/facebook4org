@@ -1,0 +1,10 @@
+<% fb_tabs do %>
+  <%= fb_tab_item "Admin - Home",           root_url+'admin',            :selected => (tab_selected?(:index, :admin)) %>
+  <%= fb_tab_item "Users list",             root_url+'admin/users_list', :selected => (tab_selected?(:users_list, :admin)) %>
+  <%= fb_tab_item "Statistics",             root_url+'admin/statistics', :selected => (tab_selected?(:statistics, :admin)) %>
+  <%= fb_tab_item "Browse Databases",       root_url+'admin/databases',  :selected => (tab_selected?(:databases, :admin)) %>
+  <%= fb_tab_item "Cron tasks",             root_url+'admin/cron',       :selected => (tab_selected?(:cron, :admin)) %>
+  <%= fb_tab_item "Notifications",          root_url+'notifications',    :selected => (tab_selected?(:index, :notifications)) %>
+  <%= fb_tab_item "Pending Users",          root_url+'admin/pending_users', :selected => (tab_selected?(:pending_users, :admin)) %>
+<%  end %>
+<br />

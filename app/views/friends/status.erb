@@ -1,0 +1,35 @@
+<h1>Friends Status</h1>
+<br />
+
+<table border="0">
+  <tr>
+    <td>
+<fb:wall>
+  <% @friend_uids_in_MM.each do |friend_uid| %>
+
+      <div  style = "text-align:left; clear: left;">
+        <fb:wallpost uid='<%= friend_uid -%>'>
+          <fb:wallpost-action href='http://www.facebook.com/inbox/?compose&id=<%=  friend_uid -%>'>Send a message</fb:wallpost-action>
+          <fb:user-status uid="<%= friend_uid -%>" linked="true">
+          </fb:user-status>
+          <br /><br />
+        </fb:wallpost>
+      </div>
+  <% end %>
+</fb:wall>
+    </td>    
+    <td valign="top">
+      <h3>Chat</h3>
+      <fb:chat-invite msg="Let's have a Chat!"
+                condensed="false"
+                exclude_ids=<%= @friend_uids_not_in_MM.map {|ids| ids+','} unless @friend_uids_not_in_MM.nil? -%> />
+    </td>
+
+  </tr>
+</table>
+
+
+
+
+
+

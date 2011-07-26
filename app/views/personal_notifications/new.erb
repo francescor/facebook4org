@@ -1,0 +1,15 @@
+<h1>New Persona Notification</h1>
+<br />
+Please note: once you create a personal notification this way, you will also update the Dashboard counter of the specific user! <br /> (more on the <a href ="http://wiki.developers.facebook.com/index.php/Dashboard_API#Understanding_the_Counter">Facebook Dashboard Counter</a> documentation)
+<br />
+<br />
+<% form_for(@personal_notification) do |f| %>
+  <%= f.error_messages %>
+
+ <%= render :partial => 'form', :locals => { :f => f }  %>
+  <p>
+    <%= f.submit 'Create' %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', personal_notifications_path %>

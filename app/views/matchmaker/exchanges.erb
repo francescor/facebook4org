@@ -1,0 +1,56 @@
+<%= render :partial => 'menu' %>
+<br >
+<h2>Exchanges</h2>
+<p>
+This section finds a match between <%= link_to 'all offers from organisations',  wanted_url(:template => 'basic', :output => 'list', :clear_session => true) -%> and the <%= link_to 'preferences for exchanges', settings_url %> you've entered.<br />
+<br />
+<% if @offers_with_same_job_area.size != 1 %>
+  <% if  @offers_with_same_job_area.size == 0 %>
+    Unfortunately
+  <% else %>
+    Very well!
+  <% end %>
+  there <%=  is_are(@offers_with_same_job_area.size) %>
+  <%= link_to_if(@offers_with_same_job_area_url,
+                 pluralize(@offers_with_same_job_area.size, 'offer'),
+                 @offers_with_same_job_area_url) %>
+      <%= " (in <b>#{@offers_with_same_job_area_url.organisation.country.capitalize}</b>) " if  @offers_with_same_job_area.size == 1 %>
+      from organisations relative to your
+<% end %>
+
+job area (<%= @current_user.job_area_in_words -%>)<%= ", among these:<br />" if (@offers_with_same_job_and_duration_for_worker.size + @offers_with_same_job_and_duration_for_volunteer.size + @offers_with_same_job_and_duration_for_intern.size) > 0 -%>
+
+   <% if @current_user.go_as_worker > 0 && @offers_with_same_job_and_duration_for_worker.size > 0 %>
+    &ensp;&ensp; there <%=  is_are(@offers_with_same_job_and_duration_for_worker.size) %>
+    <%= link_to_if(@offers_with_same_job_and_duration_for_worker_url,
+                   pluralize(@offers_with_same_job_and_duration_for_worker.size, 'offer'),
+                   @offers_with_same_job_and_duration_for_worker_url) %>
+                   <%= " (in <b>#{@offers_with_same_job_and_duration_for_worker_url.organisation.country.capitalize}</b>) " if  @offers_with_same_job_and_duration_for_worker.size == 1 %>
+                   for <b><%= 'worker'.pluralize %></b> for <b><%=  @current_user.go_as_worker_duration_in_words.downcase  %></b>
+                   <br />
+   <% end %>
+
+   <% if @current_user.go_as_volunteer > 0 && @offers_with_same_job_and_duration_for_volunteer.size > 0 %>
+    &ensp;&ensp; there <%=  is_are(@offers_with_same_job_and_duration_for_volunteer.size) %>
+    <%= link_to_if(@offers_with_same_job_and_duration_for_volunteer_url,
+                   pluralize(@offers_with_same_job_and_duration_for_volunteer.size, 'offer'),
+                   @offers_with_same_job_and_duration_for_volunteer_url) %>
+                   <%= " (in <b>#{@offers_with_same_job_and_duration_for_volunteer_url.organisation.country.capitalize}</b>) " if  @offers_with_same_job_and_duration_for_volunteer.size == 1 %>
+                   for <b><%= 'volunteer'.pluralize %></b> for <b><%=  @current_user.go_as_volunteer_duration_in_words.downcase  %></b>
+                   <br />
+   <% end %>
+
+   <% if @current_user.go_as_intern > 0 && @offers_with_same_job_and_duration_for_intern.size > 0 %>
+    &ensp;&ensp; there <%=  is_are(@offers_with_same_job_and_duration_for_intern.size) %>
+    <%= link_to_if(@offers_with_same_job_and_duration_for_intern_url,
+                   pluralize(@offers_with_same_job_and_duration_for_intern.size, 'offer'),
+                   @offers_with_same_job_and_duration_for_intern_url) %>
+                   <%= " (in <b>#{@offers_with_same_job_and_duration_for_intern_url.organisation.country.capitalize}</b>) " if  @offers_with_same_job_and_duration_for_intern.size == 1 %>
+                   for <b><%= 'intern'.pluralize %></b> for <b><%=  @current_user.go_as_intern_duration_in_words.downcase  %></b>
+                   <br />
+   <% end %>
+
+<br >
+
+
+</p>

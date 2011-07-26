@@ -1,0 +1,26 @@
+<h1>Editing individual_post</h1>
+
+<% form_for(@individual_post) do |f| %>
+  <%= f.error_messages %>
+
+
+  <p>
+    Title (short text describing your role: i.e. "Techician", "Sound Engineer" ...)<br />
+    <%= f.text_field :title %>
+  </p>
+  <p>
+    Type<br />
+    <%= select 'individual_post', 'kind', INDIVIDUAL_POST_KINDS %>
+  </p>
+  <p>
+    Best time (when, for how long...)<br />
+    <%= f.text_field :when %>
+  </p>
+  <p>
+    Description<br />
+    <%= f.text_area :description %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>

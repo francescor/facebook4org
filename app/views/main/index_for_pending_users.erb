@@ -1,0 +1,79 @@
+<div style = "text-align:right;" >
+  <fb:bookmark></fb:bookmark>
+</div>
+<h2> Waiting to be approved </h2>
+
+
+<fb:prompt-permission perms="offline_access" next_fbjs="permission_gohome()">
+  <!-- we need this in case user REMOVE permission -->
+    <script type="text/javascript"> 
+    function permission_gohome() 
+    { 
+    document.setLocation('<%= home_url -%>');
+    } 
+    </script>
+    <br />
+    <div  style = "border:1px solid #BDC7D8;padding:4px; width: 300px; background:#fff9d7; float:right;">
+      <small>Note:<br />
+        The <%= APPLICATION_NAME_WITH_STYLE %> needs your permission to remember you to speed up the process of match-making, and
+        to create a significant experience for other <%= APPLICATION_NAME_WITH_STYLE %> users when they asking about you. <br />
+        <br /><strong>Click in this box</strong> to allow this permission.<br />
+      </small>
+    </div>
+    <div style ="clear:both">
+     <br />
+     <br />
+    </div>
+</fb:prompt-permission>
+
+
+<br />
+
+<div class="menu" style="width: 510px; height: 400px;float:left;clear:both" >
+  <h3> Welcome <%= fb_name(@current_user.uid, :firstnameonly => true, :useyou => false, :linked => false) %> to the <%= APPLICATION_NAME_WITH_STYLE %> </h3>
+  Your registration in the <%= APPLICATION_NAME_WITH_STYLE %> is completed. Now the <%= MAIN_ORG_SHORT_NAME %> office has just been notified of your registration. Don't worry, this process will not take much time, but please give enough time so <%= MAIN_ORG_SHORT_NAME %> office can review your registration.<br/>
+  Once you've been approved you'll receive a notification at <b><%= @current_user.email %></b><br/>
+  <br/>
+  In the meanwhile you can:<br/><br/>
+  <ul>
+    <li>
+      <%= link_to 'Update your profile', settings_url %>
+     <div class="descrip">Check & update the information other <%= APPLICATION_NAME_WITH_STYLE %> users see about you.</div>
+    </li>
+    <li>
+      <%= link_to 'Have a look at other tools', 'http://changingroom.teh.net' %>
+     <div class="descrip">The <%= APPLICATION_NAME_WITH_STYLE %> is just one of the tool of the ChangingRoom project users see about you. View the <%= link_to 'other tools', 'http://changingroom.teh.net' %>: for example have a look at the <%= link_to 'KnowledgeBase', "http://changingroom.teh.net/wiki/"%><br /></div>
+    </li>
+  </ul>
+  <br/><br/>
+  If you are not part of any <%= MAIN_ORG_SHORT_NAME %> organisations and/or want to leave want to leave? <%= link_to "Remove completely your profile", @current_user, :confirm => "Are you sure? This will also remove ALL your data in the #{APPLICATION_NAME}, and you'll be logged out.", :method => :delete %>.
+  <br/><br/>
+
+    <p><i>Having trouble? Please <%= link_to 'contact us', CONTACT_US_LINK %>.</i></p>
+
+</div>
+
+
+<div  style = "text-align:center;border:0px solid #BDC7D8;padding:5px; width: 205px;float:right; height: 120px; ">
+
+
+
+
+   <%= APPLICATION_NAME_WITH_STYLE %> is part of the <br />
+   <br />
+   <%= link_to (image_tag 'toolkit_logo.jpg', :width => '130', :alt => ''), 'http://changingroom.teh.net' %><br />
+   <br />
+   <small>
+     <%= link_to 'View other tools', 'http://changingroom.teh.net' %><br />
+   </small>
+  
+  
+</div>
+
+<div  style = "text-align:center;border:0px solid #BDC7D8;padding:5px; width: 205px;float:right; height: 10px; ">
+</div>
+
+
+<div style="width: 748px;height: 18px;border:1px;clear: both; " >
+</div>
+

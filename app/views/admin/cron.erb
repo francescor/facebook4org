@@ -1,0 +1,23 @@
+<%= render :partial => 'menu' %>
+<br />
+
+<h2>Users Lat & Lng data</h2>
+Users not spotted in map (with no lat & lng) = <%= @users_with_empty_lat_and_lng.size %>.  <%= link_to "Populate users' latitude and longitude", :action => 'populate_users_lat_and_lng' %>
+<br />
+<br />
+
+<h2>Organisations Lat & Lng data</h2>
+Organisations not spotted in map (with no lat & lng) = <%= @organisations_with_empty_lat_and_lng.size %>.  <%= link_to "Populate organisations' latitude and longitude", :action => 'populate_organisations_lat_and_lng' %>
+<br />
+<br />
+
+Populate last_signup_step_at for users without it: (<%= User.find(:all, :conditions => {:last_signup_step_at => nil, :signup_step => 3}).size %>)  <%= link_to 'populate last_signup_step_at', :action => 'populate_last_signup_step_at' %>
+<br />
+<br />
+<h2>Remember to do the following once in a while:</h2>
+
+<pre>ruby script/console
+load '~/rails_work/changingroom.archenet.it/cron/populate_cache_info.rb'
+</pre>
+
+<pre>rake db:sessions:clear</pre>

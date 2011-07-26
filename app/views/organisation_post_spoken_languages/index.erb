@@ -1,0 +1,24 @@
+<h1>Listing organisation_post_spoken_languages</h1>
+
+<table>
+  <tr>
+    <th>Organisation post</th>
+    <th>Language</th>
+    <th>Rank</th>
+  </tr>
+
+<% @organisation_post_spoken_languages.each do |organisation_post_spoken_language| %>
+  <tr>
+    <td><%=h organisation_post_spoken_language.organisation_post_id %></td>
+    <td><%=h organisation_post_spoken_language.language_id %></td>
+    <td><%=h organisation_post_spoken_language.rank %></td>
+    <td><%= link_to 'Show', organisation_post_spoken_language %></td>
+    <td><%= link_to 'Edit', edit_organisation_post_spoken_language_path(organisation_post_spoken_language) %></td>
+    <td><%= link_to 'Remove', organisation_post_spoken_language, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New organisation_post_spoken_language', new_organisation_post_spoken_language_path %>

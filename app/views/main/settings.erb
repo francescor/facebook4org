@@ -1,0 +1,99 @@
+<h2>My Settings</h2>
+
+
+<br>
+<table border="0">
+    <tbody>
+      <tr>
+        <td style ="width: 50%;">         
+            <%= fb_profile_pic(@current_user.uid, :facebook_logo => true) %><br>
+            Name:          <b><%=  fb_name(@current_user.uid, :useyou => false, :linked => false) %></b><br>
+          <br/>
+          <b>My <%= APPLICATION_NAME_WITH_STYLE -%> Profile</b> (<%= link_to 'edit', edit_profile_path %>)<br/>
+            City: <b><%=h @current_user.city %></b><br/>
+            Street: <b><%=h @current_user.street %></b><br/>
+            <%= "Region: <b>#{@current_user.state}</b><br/>" unless @current_user.state.blank?%>
+            Post Code: <b><%=h @current_user.post_code %></b><br/>
+            Country: <b><%=h @current_user.country %></b><br/>
+            Gender: <b><%=h @current_user.gender %></b><br/>
+            Age: <b><%=h @current_user.age_in_words %></b>
+                <% unless @current_user.birthday_day == 0 || @current_user.birthday_month == 0 %>
+                  (birthday: <b><%= number_to_ordinal(@current_user.birthday_day) %> of <%= @current_user.birthday_month_in_words %></b>)
+                <% end %>
+            <br/>
+            Email: <b><%=h @current_user.email %></b>
+            <%= "(hidden)" if (@current_user.email_privacy && !@current_user.email.blank?) %>
+            <br />
+            <% unless  @current_user.twitter.blank? %>
+              Twitter: <%= link_to "http://twitter.com/#{@current_user.twitter}", "http://twitter.com/#{@current_user.twitter}" %><br />
+            <% end %>
+            <% unless  @current_user.linkedin.blank? %>
+              LinkedIn: <%= link_to "http://#{@current_user.linkedin}", "http://#{@current_user.linkedin}" %><br />
+            <% end %>
+          <br/>
+
+          <b>My Job</b> (<%= link_to 'edit', edit_profile_path %>)<br/>
+            <%= "<b>Manager</b> of the " if @current_user.is_manager %>
+            Area: <b><%=h @current_user.job_area_in_words %></b><br/>
+            Job Description: <b><%=h @current_user.job_description %></b><br/>
+
+            <%= "<b>Director or President</b> of #{@current_user.organisation.short_name}<br/>" if @current_user.is_boss %>
+            <%= "<b>Member of the Board</b> of #{@current_user.organisation.short_name}<br/>" if @current_user.is_board_member %>
+            <%= "Working at #{@current_user.organisation.short_name} for:  <b>#{@current_user.hours_as_worker_in_words}</b><br/>" unless @current_user.hours_as_worker_in_words.nil? %>
+            <%= "Volunteer at #{@current_user.organisation.short_name} for:  <b>#{@current_user.hours_as_volunteer_in_words}</b><br/>" unless @current_user.hours_as_volunteer_in_words.nil? %>
+          <br/>
+        </td>
+        <td style = "text-align:right;" >
+          <% if @current_user.lat == 0 || @current_user.lng == 0  %>
+            <i>No map view (please <%= link_to 'update', :controller => 'users', :action=>'edit_profile', :id => @current_user %> your address)</i>
+          <% else %>
+            <fb:iframe src="<%= @url_for_iframe -%>" width="336" height="290" scrolling="no" >
+            </fb:iframe>
+          <% end %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+
+<b>My preferences for exchanges</b> (<%= link_to 'edit', edit_preferences_path %>)<br/>
+These are interests in going in another organisation on exchange:<br>
+&nbsp;&nbsp;<i>as a Worker:</i> <b><%= @current_user.go_as_worker_in_words %></b>  <br>
+&nbsp;&nbsp;<i>as a Volunteer:</i> <b><%= @current_user.go_as_volunteer_in_words %></b> <br>
+&nbsp;&nbsp;<i>as an Intern/training:</i> <b><%= @current_user.go_as_intern_in_words %></b> <br>
+&nbsp;&nbsp;<i>for a short planning visit:</i> <b><%= @current_user.go_as_visitor_in_words %></b> <br>
+<br>
+Information I added about a possible exchange: <%= go_info_in_words_info_for_current %><br/>
+<br>
+Am I willing to host somebody in my home? <b><%=h @current_user.hosting_in_words %></b><br/>
+<%=  "Can #{APPLICATION_NAME_WITH_STYLE} users contact me for information about <strong>#{@current_user.city.upcase}</strong> or <strong>#{@current_user.organisation.short_name.upcase}</strong>? " %><b><%=h @current_user.infopoint.capitalize %></b><br/>
+<br/>
+<br/>
+
+<b>My preferences for notifications</b> (<%= link_to 'edit', edit_notification_preferences_path %>)<br/>
+<i>You will be notified:</i> <b><%= @current_user.notification_by_email_every_in_words %></b>  <br>
+<%=  "&nbsp;&nbsp; * When the #{APPLICATION_NAME_WITH_STYLE} find a match for me<br/>" if @current_user.notify_match %>
+<%=  "&nbsp;&nbsp; * When new users working in my area enter the #{APPLICATION_NAME_WITH_STYLE}<br/>" if @current_user.notify_colleague %>
+<%=  "&nbsp;&nbsp; * Whenever there is a new event in the #{APPLICATION_NAME_WITH_STYLE}<br/>" if @current_user.notify_notifications_for_all %>
+<br/>
+<br/>
+<b>My Organisation</b><br />
+Name:     <b><%= link_to @current_user.organisation.name, @current_user.organisation %></b> (<%= link_to @current_user.organisation.short_name, @current_user.organisation %>)<br />
+Homepage:
+  <% unless @current_user.organisation.homepage.blank? %>
+    <b><%= link_to 'http://'+@current_user.organisation.homepage, 'http://'+@current_user.organisation.homepage %></b>
+ <% end %> <br />
+City:     <b><%= @current_user.organisation.city %></b><br />
+Country:  <b><%= @current_user.organisation.country %></b><br />
+<br/><br/>
+
+
+<% unless @current_user.visits.empty? %>
+  <h3>Your visits to organisations: </h3>
+    <% @current_user.visits.sort_by {|visit| visit.when}.each do |visit| %>
+      You were at <%= link_to visit.organisation.short_name, visit.organisation %> <%= link_to time_ago_in_words(visit.when)+' ago: '+visit.description.to_s,  {:controller => 'visits', :action => 'edit', :id => visit}, :title => 'Click to edit' %> <small>(<%= link_to 'Edit', :controller => 'visits', :action => 'edit', :id => visit %>)</small>
+      <br />
+    <% end %>
+  <br />
+  <br />
+<% end %>

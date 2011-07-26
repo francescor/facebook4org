@@ -1,0 +1,44 @@
+<h1>Editing user</h1>
+
+<% form_for(@user) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :uid %><br />
+    <%= f.text_field :uid %>
+  </p>
+  <p>
+    <%= f.label :hosting %><br />
+    <%= f.text_field :hosting %>
+  </p>
+  <p>
+    <%= f.label :job_area %><br />
+    <%= f.text_field :job_area %>
+  </p>
+  <p>
+    <%= f.label :job_role %><br />
+    <%= f.text_field :job_role %>
+  </p>
+  <p>
+    <%= f.label :infopoint %><br />
+    <%= f.text_field :infopoint %>
+  </p>
+  <p>
+    <%= f.label :session_key %><br />
+    <%= f.text_field :session_key %>
+  </p>
+  <p>
+    <%= f.label :session_expires %><br />
+    <%= f.text_field :session_expires %>
+  </p>
+  <p>
+    <%= f.label :last_access %><br />
+    <%= f.datetime_select :last_access %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @user %> |
+<%= link_to 'Back', users_path %>

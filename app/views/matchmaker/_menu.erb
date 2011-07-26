@@ -1,0 +1,7 @@
+<% fb_tabs do %>
+  <%= fb_tab_item("My Matches",                   url_for(:controller => 'matchmaker', :action => "index"),                    :selected => tab_selected?(:index)) %>
+  <%= fb_tab_item("Connections by location",      url_for(:controller => 'matchmaker', :action => "connection_with_location"), :selected => tab_selected?(:connection_with_location)) %>
+  <%= fb_tab_item("Same job Area",                url_for(:controller => 'matchmaker', :action => "colleagues"),               :selected => tab_selected?(:colleagues)) %>
+  <%= fb_tab_item("Where can you go?",            url_for(:controller => 'matchmaker', :action => "exchanges"),                :selected => tab_selected?(:exchanges)) %>
+  <%= fb_tab_item("For your organisation",        url_for(:controller => 'matchmaker', :action => "for_your_organisation"),    :selected => tab_selected?(:for_your_organisation)) %>
+<% end %>

@@ -1,0 +1,56 @@
+<br />
+<% if @user.signup_step == 2 %>
+<br>
+  <h2>Your Preferences for mobility</h2>
+  <br />
+<% else %>
+  <h2>Preferences</h2>
+<% end %>
+  <br>
+
+<% facebook_form_for(@user, :labelwidth => "350") do |f| %>
+  <%= f.error_messages %>
+
+  <fb:editor-custom label="Are you interested in going to another organisation">
+  </fb:editor-custom>
+
+  <input name='edit_action' type='hidden' value = 'edit_preferences' />
+  
+
+  <%= f.select :go_as_worker, GO_AS_TYPES, :label => "*As a Worker?" %>
+
+  <%= f.select :go_as_volunteer, GO_AS_TYPES, :label => "*As a Volunteer?" %>
+
+  <%= f.select :go_as_intern, GO_AS_TYPES, :label => "*As an Intern/training?" %>
+
+  <%= f.select :go_as_visitor, GO_AS_VISITOR_TYPES, :label => "*For a short planning visit?" %>
+
+
+
+  <fb:editor-custom label="Additional information">
+    <%= text_area :user, :go_info, :cols => 80, :rows => 4 %>
+    <small>
+    Any additional information you want to add about a possible exchange (i.e. under what conditions
+    are you available to go, when & where you'd like to, ...)
+    </small>
+  </fb:editor-custom>
+
+  <fb:editor-custom label='<%=  "*Can #{APPLICATION_NAME} users contact you for information about #{@current_user.city.upcase} or #{@current_user.organisation.short_name.upcase}?" %>'>
+    <%= radio_button :user, :infopoint, 'yes' %> Yes
+    <%= radio_button :user, :infopoint, 'no'  %> No
+  </fb:editor-custom>
+
+  <fb:editor-custom label="*Are you willing to host somebody who wants to go on a short visit?">
+    <%= select :user, :hosting, HOSTING_TYPES %>
+  </fb:editor-custom>
+  
+
+  <%= f.buttons 'Save' %>
+
+
+  <fb:editor-custom>
+    (*) <i>required fields</i>
+  </fb:editor-custom>
+
+
+<% end %>

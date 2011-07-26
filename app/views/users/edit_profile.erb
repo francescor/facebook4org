@@ -1,0 +1,104 @@
+
+<br />
+<% if @user.signup_step == 1 %>
+<br />
+  <h2>Profile</h2>
+  <br />
+  <i>This is the data about you that will be shown to other users in the <%= APPLICATION_NAME_WITH_STYLE -%></i>.
+<% else %>
+  <h2>Profile</h2>
+  <br />
+<% end %>
+<br />
+
+<% facebook_form_for(@user, :labelwidth => "350") do |f| %>
+  <%= f.error_messages %>
+  <input name='edit_action' type='hidden' value = 'edit_profile' />
+
+  <% if (@current_user == @user) && (@user.signup_step > 2) %>
+    <div style="text-align:right;" >
+          <%= link_to "Remove me from the #{APPLICATION_NAME}", @user, :confirm => "Are you sure? This will also remove ALL your data in the #{APPLICATION_NAME}, and you'll be logged out.", :method => :delete %>
+    </div>
+  <% end %>
+
+  <fb:editor-custom label="*City">
+    <%= text_field :user, :city, :size => 40, :maxlength=> 50 %>
+    <small>where you live</small>
+  </fb:editor-custom>
+
+  <%= f.text_field :post_code, :size => 10, :maxlength=> 10, :label => "Post Code" %>
+
+  <% if @user.signup_step > 2  %>
+    <fb:editor-custom label="Street">
+      <%= text_field :user, :street, :size => 40, :maxlength=> 50 %>
+      <small>in case you want to be more precise in spotting your location in maps</small>
+    </fb:editor-custom>
+  <% end %>
+
+  <fb:editor-custom label="Region">
+    <%= text_field :user, :state, :size => 25, :maxlength=> 25 %>
+    <small>if applicable</small>
+  </fb:editor-custom>
+
+  <%= f.select :country, COUNTRY_TYPES, :label => "*Country" %>
+
+  <%= f.select :age, AGE_TYPES, :label =>  "*Age" %>
+
+  <fb:editor-custom label="Birthday">
+    <%= select :user, :birthday_day, BIRTHDAY_DAY_TYPES %>
+    <%= select :user, :birthday_month, BIRTHDAY_MONTH_TYPES %>
+  </fb:editor-custom>
+
+  <%= f.select :gender, GENDER_TYPES, :label => "*Gender" %>
+
+  <%= f.select :is_board_member, YES_NO_TYPES, :label => "*Are you a member of the board of #{@user.organisation.short_name}?" %>
+
+  <%= f.select :is_boss, YES_NO_TYPES, :label => "*Are you the Director or President of #{@user.organisation.short_name}?" %>
+
+  <%= f.select :hours_as_worker, HOURS_A_WEEK_TYPE, :label => "* Average number of hours per week of paid job?" %>
+
+  <%= f.select :hours_as_volunteer, HOURS_A_WEEK_TYPE, :label => "* Average number of hours per week as volunteer?" %>
+
+  <fb:editor-custom label ="*Job Area">
+    <%= select :user, :job_area, JOB_AREA_TYPES %>
+    <br />
+    <small>
+      Select what best describes the area of culture you currently work
+      (If you are an artist or not currently working, select the area that you either do some work in or you are most interested in working in)
+    </small>
+  </fb:editor-custom>
+
+
+  <%= f.select :is_manager, YES_NO_TYPES, :label => "*Are you the Manager for your Job Area?" %>
+  
+  <%= f.text_area :job_description, :cols => 80, :rows => 4, :label => "*Job Description"  %>
+
+  <%= f.text_field :email, :size => 30, :maxlength=> 50, :label => "*Email" %><br />
+
+  <fb:editor-custom label="Hide email">
+    <%= check_box :user, :email_privacy -%>
+    <small>Hide my email to other  <%= APPLICATION_NAME_WITH_STYLE -%> users</small>
+  </fb:editor-custom>
+
+
+  <% if @user.signup_step >= 3 %>
+    <%= f.text_field :twitter, :size => 20, :maxlength=> 20, :label => "Twitter Username"  %>
+
+    <fb:editor-custom label="LinkedIn Public Profile URL">
+      <%= text_field :user, :linkedin, :size => 40, :maxlength=> 50 %>
+      <small>Are you in LinkedIn but don't know your Public Profile URL? find it out in your <%= link_to 'LinkedIn profile','http://www.linkedin.com/myprofile?editwp=' %></small>
+    </fb:editor-custom>
+
+  <% end %>
+
+  <% if @user.signup_step == 1 %>
+    <%= f.buttons 'Save and Continue' %>
+  <% else %>
+    <%= f.buttons 'Save' %>
+  <% end %>
+
+  <fb:editor-custom>
+    (*) <i>required fields</i>
+  </fb:editor-custom>
+
+<% end %>

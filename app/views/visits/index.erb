@@ -1,0 +1,25 @@
+<h1>Listing visits</h1>
+
+<table>
+  <tr>
+    <th>Id</th>
+    <th>User</th>
+    <th>Organisation</th>
+    <th>Description</th>
+    <th>When</th>
+  </tr>
+
+<% @visits.each do |visit| %>
+  <tr>
+    <td><%= visit.id %></td>
+    <td><%= link_to fb_name(visit.user.uid, :linked => false), visit.user %></td>
+    <td><%= link_to visit.organisation.short_name, visit.organisation %></td>
+    <td><%= visit.description %></td>
+    <td><%= visit.when %></td>
+    <td><%= link_to 'Edit', edit_visit_path(visit) %></td>
+    <td><%= link_to 'Remove', visit, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />

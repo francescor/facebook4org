@@ -1,0 +1,8 @@
+<% if @status == 'ok' %>
+  <%=  "Results: <b>#{@organisations.size}</b>" %><br/>
+  <br/>
+  <%= GMap.header %>
+  <%= javascript_include_tag("markerGroup") %>
+  <%= @map.to_html%>
+  <%= @map.div(:width => 600, :height => 400)%>
+<% end %>

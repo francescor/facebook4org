@@ -1,0 +1,23 @@
+<br />
+<h2>Permission</h2>
+<br />
+
+
+  <fb:prompt-permission perms="offline_access" next_fbjs="permission_gohome()">
+    <script type="text/javascript">
+    function permission_gohome()
+    {
+    document.setLocation('<%= home_url -%>');
+    }
+    </script>
+    <br />
+    <div  style = "border:1px solid #BDC7D8;padding:12px; width: 600px; background:#fff9d7; float:left;">
+        The <%= APPLICATION_NAME_WITH_STYLE %> needs your permission to remember you to speed up the process of match-making, and
+        to create a significant experience for other <%= APPLICATION_NAME_WITH_STYLE %> users when they asking about you. <br />
+        <br /><strong>Click in this box</strong> to allow this permission and enter the <%= APPLICATION_NAME_WITH_STYLE %>.<br />
+    </div>
+    <div style ="clear:both">
+     <br />
+     <br />
+    </div>
+  </fb:prompt-permission>

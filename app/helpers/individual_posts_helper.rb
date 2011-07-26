@@ -1,0 +1,2 @@
+module IndividualPostsHelper
+end

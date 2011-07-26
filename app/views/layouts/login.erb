@@ -1,0 +1,39 @@
+<fb:fbml version="1.1">
+
+  <link rel="stylesheet" type="text/css" media="screen" href=<%=  stylesheet_path 'base' %> />
+
+  <h1><%= image_tag  'cr_logo_16px.png', :alt=> ' ' %> <%= APPLICATION_LONG_NAME %></h1>
+  <br>
+
+  <%=  facebook_messages %>
+
+  <br>
+  <%= yield %>
+  <br>
+  <br>
+  <br>
+  <br>
+  <p><i>Having trouble logging in? Please <%= link_to 'contact us',CONTACT_US_LINK %>.</i></p>
+  <br>
+  <br>
+  <fb:comments xid="<%= controller.controller_name %>.<%= controller.action_name %>"
+             canpost="true"
+             candelete="true"
+             publish_feed="false"
+             send_notification_uid="<%= FACEBOOK_ID_OF_THE_FB_USER_WHO_WILL_RECEIVE_FB_COMMENTS_NOTIFICATION -%>">
+  </fb:comments>
+  <br>
+  <br>
+  <br>
+  <p><%= image_tag  'education-and-culture-dg_logo.png', :alt=> 'EU Logo' %></p>
+  <span style="font-size: 8px;">
+     The project <%= link_to 'Changing Room', CHANGING_ROOM_LINK -%> has been funded with the support
+    from the European Commission. The work programme of <%= link_to 'TEH', 'http://www.teh.net' %> has been funded
+    with the support from the European Commission. This publication [communication] reflects the views only of the
+    author, and the Commission cannot be held responsible for any use which may be made of the information
+    contained therein. <br>
+    <%= link_to 'TEH', 'http://www.teh.net' %> has been awarded a multi-annual operational grant by the Nordic
+    Council of Ministers for the project Trans Nordic Net.
+  </span>
+
+</fb:fbml>

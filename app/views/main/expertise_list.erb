@@ -1,0 +1,31 @@
+
+<% fb_tabs do %>
+  <%= fb_tab_item "List of Experts on offer",    'expertise_list',             :selected => (tab_selected?(:main, :expertise_list)) %>
+  <%= fb_tab_item "+ Add my expert offer",  individual_posts_path %>
+  <%= fb_tab_item "+ Add your expert request ", root_url+'organisation_posts/new' %>
+<%  end %>
+<br>
+
+<i> TODO: Here there will be the list of all experts' offers with their face with possibility to search and to Browse/order.</i><br />
+<i>some automatic message may be added (i.e.... you are not in, yet.. wanna try? why not?</i><br>
+
+<br>
+<h3>Experts offers</h3>
+<br>
+<br>
+<table cellpadding="3" cellspacing="1" border ="0">
+  <% for individual_post in @individual_posts %>
+    <tr>
+      <td>
+
+          <%= fb_profile_pic(individual_post.user.uid) %><br>
+          <%= link_to individual_post.title, individual_post %><br>
+          <%= individual_post.user.country.upcase %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+
+
+
+

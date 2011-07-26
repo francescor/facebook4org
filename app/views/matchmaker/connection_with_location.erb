@@ -1,0 +1,75 @@
+<%= render :partial => 'menu' %>
+<br />
+<h2>My connections with location</h2>
+<br />
+<p>
+Are you going somewhere and need connections?<br />
+</p>
+<br />
+  <!-- http://wiki.developers.facebook.com/index.php/DynamicFBML/Forms -->
+  <form>
+    <div id="message" style='display:none'>...searching</div>
+    <input id="filter_close_to_loc" maxlength="30" name="filter_close_to_loc" size="35" type="text" value="<%=  @selected_close_to_loc -%> " />
+
+    <input id="sendbutton" name="commit" type="submit" value="<%= @location.nil? ? 'Search City' : 'Change City'  -%>"
+            clicktohide="sendbutton" clickthrough="true" clicktoshow="message"     />
+    <small>i.e. <em>"Paris"</em> or <em>"Oxford, Ireland"</em></small>
+    <br />
+  </form>
+
+
+<br />
+<% unless @location.nil? %>
+  <p>
+  The closest organisation to <b><%= h  @location.city.capitalize %> (<%= h  @location.country.capitalize %>)</b> is <%= link_to @organisations_close_to_loc[0].short_name.capitalize, @organisations_close_to_loc[0] %>, located in <%=  @organisations_close_to_loc[0].city.capitalize %> (<b><%=  @organisations_close_to_loc[0].distance_from(@location).round -%></b> km away),
+  then <%= link_to @organisations_close_to_loc[1].short_name.capitalize, @organisations_close_to_loc[1] %> (in <%=  @organisations_close_to_loc[1].city.capitalize %>, <b><%=  @organisations_close_to_loc[1].distance_from(@location).round -%></b> km away)
+  and <%= link_to @organisations_close_to_loc[2].short_name.capitalize, @organisations_close_to_loc[2] %> (in <%=  @organisations_close_to_loc[2].city.capitalize %>, <b><%=  @organisations_close_to_loc[2].distance_from(@location).round -%></b> km away). <br />
+  <%= link_to "View all organisations by distance from #{@location.city.capitalize}", search_organisations_url(:template => 'only_results', :clear_session => 'true', :filter_close_to_loc => @selected_close_to_loc) %>.<br />
+  <br />
+  The  closest people to <b><%= h @location.city.capitalize %> (<%= h @location.country.capitalize %>)</b> are:<br />
+  <% for i in 0..(@users_close_to_loc_to_show-1)  do  %>
+      - <%= link_to fb_name(@users_close_to_loc[i].uid, :linked => false), @users_close_to_loc[i] %> from <%= @users_close_to_loc[i].city %> (<b><%=@users_close_to_loc[i].distance_from(@location).round -%></b> km away);
+      <%= "#{he_she(@users_close_to_loc[i])} offers hospitality." if @users_close_to_loc[i].hosting == 'yes' %>
+      <%= "#{he_she(@users_close_to_loc[i])} may offer hospitality." if @users_close_to_loc[i].hosting== 'maybe' %>
+      <br />
+  <% end %>
+  <br />
+  take a look at:<br />
+  <%= link_to 'Closest people to '+@location.city.capitalize, search_url(:template => 'only_results', :clear_session => 'true', :filter_close_to_loc => @selected_close_to_loc) %><br />
+  <%= link_to 'Closest people to '+@location.city.capitalize+' offering hospitality' , search_url(:template => 'only_results', :clear_session => 'true', :filter_close_to_loc => @selected_close_to_loc, :filter => 'hosting') %><br />
+  <%= link_to 'Closest friends to '+@location.city.capitalize+' offering hospitality', search_url(:template => 'only_results', :clear_session => 'true', :filter_close_to_loc => @selected_close_to_loc, :filter_friendship => 'friends') %><br />
+  <% if @users_close_to_loc_last_distance < @users_close_to_loc_distance %>
+    <%= link_to "People living not too far away (#{@users_close_to_loc_distance.to_s} km) available for information about #{@location.city.capitalize}", search_url(:template => 'only_results', :clear_session => 'true', :filter_close_to_loc => @selected_close_to_loc, :filter_close_to_km => @users_close_to_loc_distance.to_s) %><br />
+    <%= link_to "People living not too far away (#{@users_close_to_loc_distance.to_s} km) available for information and offering hosting", search_url(:template => 'only_results', :clear_session => 'true', :filter_close_to_loc => @selected_close_to_loc, :filter_close_to_km => @users_close_to_loc_distance.to_s, :filter => 'hosting') %><br />
+  <% end %>
+  </p>
+<% end %>
+<br />
+<br />
+
+<!--
+
+<h2>My connections with organisation</h2>
+<br />
+
+<% form_tag @search_action do %>
+  <%# FILTER BY ORG %>
+  <%= strong_if "Select che organisation you are interested with:", !@selected_organisation.blank? %>
+  <%= #select_tag 'organisation_id', options_for_select(@filter_organisation_options_for_select, @selected_organisation) 
+  %>
+  <%= submit_tag 'Go' %><br />
+<% end %>
+<% unless true# @selected_organisation.blank? %>
+  <strong><%= link_to @selected_organisation.short_name,  @selected_organisation %></strong> (<%= @selected_organisation.name %>) is located in <%= @selected_organisation.city %> (<%= @selected_organisation.country %>)<br />
+  <br />
+  Is member/friend of TEH and has <%= link_to_if  @selected_organisation_friends.size > 0, (capitalize(@selected_organisation_friends.size, 'person')), search_url(:template => 'only_results', :clear_session => 'true', :filter_organisation =>  @selected_organisation.id_to_s)  %> registered in the <%= APPLICATION_NAME_WITH_STYLE %>. <br />
+  <br />
+  You have <%= link_to (capitalize(@selected_organisation_friends.size, 'friend')), search_url(:template => 'only_results', :clear_session => 'true', :filter_organisation =>  @selected_organisation.id_to_s, :filter_friendship => 'friends')  %>
+  at <%= @selected_organisation.short_name %>:
+  X offers hospitality, and Y are available for give information about <%= @selected_organisation.city %>. <br />
+  <br />
+  (if has no friends there)Aren't you friend with anybody from that organisation? don't worry, maybe some of your friends are: take a look at <%= link_to 'All people from this organisation' %> you may find people you have mutual friends with.<br />
+
+<% end %>
+
+-->

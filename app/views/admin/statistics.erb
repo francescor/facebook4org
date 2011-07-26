@@ -1,0 +1,66 @@
+<%= render :partial => 'menu' %>
+<h1>Statistics</h1>
+<small><%= Time.now.strftime("Printed on %A, %m %B %Y at %I:%M%p") %></small><br />
+<br />
+<br />
+See also the <%= link_to "Facebook statistics (insights) specific to the #{APPLICATION_NAME}", "http://www.facebook.com/business/insights/app.php?id=#{APPLICATION_ID}" %> (for developers only)
+<br />
+<br />
+<h2>Users</h2>
+
+<br />
+<b>Full Users</b> (signup_step>=3): <b><%= @total_users %></b> (in the last 30 days: <b><%= User.find(:all, :conditions => "signup_step >= 3 AND last_signup_step_at > '#{@my_30_days_ago_utc.to_date} #{@my_30_days_ago_utc.hour}:#{@my_30_days_ago_utc.min}:00'").size %></b>)<br />
+Users with signup_step=2: <b><%= User.find(:all, :conditions => "signup_step = 2").size %></b> <br />
+Users with signup_step=1: <b><%= User.find(:all, :conditions => "signup_step = 1").size %></b> <br />
+Users with signup_step=0: <b><%= User.find(:all, :conditions => "signup_step = 0").size %></b> <br />
+<br />
+<small>
+  <i>
+  Legenda for Signup_step:<br />
+    <b>0</b>: User have only reached the "choose your organisation" step, but did not choose it<br />
+    <b>1</b>: User have choosen the organisation, but then did not go further since could not for not being in the Fb group, or just because he did not want to.<br />
+    <b>2</b>: User belogns to Fb admission group, have filled the preferences but still need to fill up preferences<br />
+    <b>3</b>: User is totally admitted to use the <%= APPLICATION_NAME -%><br />
+    <b>4</b>: User is fully admitted, and has given (at least once) the constant authorization permission<br />
+
+  </i>
+</small>
+<br />
+Percentage of users who are:<br />
+ - willing to host: <b><%= (1.0*User.find(:all, :conditions => BASE_USER_FIND_CONDITIONS+" AND hosting = 'yes'").size/@total_users*100).to_i %> %</b><br />
+ - maybe willing to host: <b><%= (1.0*User.find(:all, :conditions => BASE_USER_FIND_CONDITIONS+" AND hosting = 'maybe'").size/@total_users*100).to_i %> %</b><br />
+ - willing to go for a visit: <b><%= (1.0*User.find(:all, :conditions => BASE_USER_FIND_CONDITIONS+" AND go_as_visitor >0 ").size/@total_users*100).to_i %> %</b><br />
+ - available to provide information about their hometown: <b><%= (1.0*User.find(:all, :conditions => BASE_USER_FIND_CONDITIONS+" AND infopoint = 'yes'").size/@total_users*100).to_i %> %</b><br />
+<br />
+<br />
+<h2>Contacts & Visits</h2>
+<br />
+<i>Contacts are created when users clic on "I've met him" in a user's page.</i> <br />
+<i>Visits are created when users clic on "I've been there" in a organisation's page.</i> <br />
+Contacts: <b><%= Contact.find(:all).size %></b> (in the past 30 days: <b><%= Contact.find(:all, :conditions => "created_at > '#{@my_30_days_ago_utc.to_date} #{@my_30_days_ago_utc.hour}:#{@my_30_days_ago_utc.min}:00'").size %></b>)<br />
+Visits: <b><%= Visit.find(:all).size %></b> (in the past 30 days: <b><%= Visit.find(:all, :conditions => "created_at > '#{@my_30_days_ago_utc.to_date} #{@my_30_days_ago_utc.hour}:#{@my_30_days_ago_utc.min}:00'").size %></b>)<br />
+
+<br />
+<br />
+
+<h2>Organisations</h2>
+<br />
+
+<%= MAIN_ORG_SHORT_NAME %> Members: <b><%= Organisation.find(:all, :conditions => "teh_membership = 'member'").size %></b><br />
+<%= MAIN_ORG_SHORT_NAME %> Friends: <b><%= Organisation.find(:all, :conditions => "teh_membership = 'friend'").size %></b><br />
+<% @other_organisations =  Organisation.find(:all, :conditions => "teh_membership != 'member' AND teh_membership != 'friend'") %>
+Others: <b><%= h  @other_organisations.size %></b> (<%= h @other_organisations.map{|organisation| "<#{organisation.name}> "} %>)<br />
+________________<br />
+Total: <b><%= Organisation.find(:all).size %></b><br />
+<br />
+Organisation's offers: <b><%= OrganisationPost.find(:all).size %></b> (in the past 30 days: <b><%= OrganisationPost.find(:all, :conditions => "created_at > '#{@my_30_days_ago_utc.to_date} #{@my_30_days_ago_utc.hour}:#{@my_30_days_ago_utc.min}:00'").size %></b>)<br />
+<br />
+<b>Organisations and numbers of registered users</b><br />
+<br />
+<small>
+  <% @organisations_by_users.each do |item| %>
+    <%= item [0] %> (<%= item[1] %>) <br/>
+  <% end %>
+</small>
+
+

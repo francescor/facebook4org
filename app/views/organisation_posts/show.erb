@@ -1,0 +1,85 @@
+
+    <%#= MAP %>
+    <br>
+    <br>
+    <table border="0">
+        <tbody>
+          <tr>
+            <td style ="width: 50%;">
+              <h1>Offer details</h1>
+              <% if @current_user.is_admin || (@current_user.organisation == @organisation_post.organisation) %>
+                <%= link_to 'Edit', edit_organisation_post_path(@organisation_post) %> | <%= link_to 'Remove', @organisation_post, :confirm => 'Are you sure?', :method => :delete %><br>
+              <% end %>
+              <br>
+
+              <p>
+                <b>Organisation:</b>
+                <%= link_to @organisation_post.organisation.name, @organisation_post.organisation   %> (<%=h @organisation_post.organisation.country %>)
+              </p>
+
+
+              <p>
+                <b>Is looking for:</b>
+                <%=h @organisation_post.category %>
+              </p>
+
+              <p>
+                <b>Area:</b>
+                <%=h @organisation_post.area_in_words %>
+              </p>
+
+              <p>
+                <b>Starting in:</b>
+                <%=h @organisation_post.when_in_words %>
+              </p>
+
+              <% unless @organisation_post.duration == 0 %>
+                <p>
+                  <b>Duration of stay:</b>
+                  <%=h @organisation_post.duration_in_words %>
+                </p>
+              <% end %>
+              <p>
+                <b>Short description:</b>
+                <%=h @organisation_post.short_description %>
+              </p>
+
+
+              <p>
+                <b>Description:</b>
+                <%=h @organisation_post.description %>
+              </p>
+
+              <p>
+                <b>Created <%=h time_ago_in_words(@organisation_post.updated_at) %> ago, by:</b><br>
+                    <%= link_to fb_profile_pic(@organisation_post.user.uid, :linked => false), @organisation_post.user %><br>
+                    <%=  link_to fb_name(@organisation_post.user.uid, :capitalize => true), @organisation_post.user -%>
+                    <br />
+                    <%= render_send_message(@organisation_post.user) %>
+              </p>
+              <br />
+            </td>
+            <td style = "text-align:right;" >
+              <% unless @organisation_post.organisation.lat == 0 || @organisation_post.organisation.lng == 0  %>
+                <fb:iframe src="<%= @url_for_iframe -%>" width="336" height="290" scrolling="no" >
+                </fb:iframe>
+              <% end %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+  <h3>Comments</h3>
+  <small>All posts will be published here and sent to <%= fb_name(@organisation_post.user.uid, :capitalize => true) %></small><br>
+
+  <fb:comments xid="<%= 'organisation_posts.show.'+@organisation_post.id.to_s -%>"
+               canpost="true"
+               <% if @current_user == @organisation_post.user || @current_user.is_admin %>
+                 candelete="true"
+               <% else %>
+                 candelete="false"
+               <% end %>
+               reverse = "true"
+               callbackurl='<%= url_for(:controller => "organisation_posts", :only_path => false)+"/show/#{@organisation_post.id.to_s}" -%>'
+               send_notification_uid ="<%= @organisation_post.user.uid.to_s -%>"
+  </fb:comments>

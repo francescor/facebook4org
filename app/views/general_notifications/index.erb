@@ -1,0 +1,28 @@
+<%= render :partial => '/admin/menu' %>
+
+<h1>Listing General Notifications</h1>
+<br />
+General notifications will be visible to all users when they clic on the 'Notifications' tab in the menu. <br />
+They are automatically created on same events, and are send automatically by email to users who have decided to receive them in their email (montly, weekly, daily or as soon as they are created),
+and are automatically deleted when they are too old.<br />
+As an admin you can <%= link_to 'create a new general notification manually', new_general_notification_path %>, or edit/remove them.
+<br />
+<br />
+
+<table cellpadding="3" cellpadding="4" border ="1">
+  <tr>
+    <th>Message</th>
+    <th>Date</th>
+    <th>&nbsp;</th>
+  </tr>
+
+<% @general_notifications.each do |general_notification| %>
+  <tr>
+    <td><%= general_notification.message %></td>
+    <td><div class = "small_and_light_note" > <%= time_ago_in_words(general_notification.date) %> ago</div></td>
+    <td><%= link_to 'Edit', edit_general_notification_path(general_notification) %> 
+    <%= link_to 'Remove', general_notification, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+

@@ -1,0 +1,15 @@
+
+<small>Once you post a message in a topic, you will receive a notification when somebody else answer it. </small><br />
+<br />
+<fb:board xid="discussion_board"
+          <% if  @current_user.is_admin %>
+          candelete="true"
+          canmark="true"
+          <% end %>
+          canmark="true"
+          numtopics="10"
+          returnurl  ='<%=  url_for(:controller => controller.controller_name, :action => controller.action_name, :only_path => false) -%>'
+          callbackurl='<%=  url_for(:controller => controller.controller_name, :action => controller.action_name, :only_path => false) -%>'
+          >
+  <fb:title>Message Board</fb:title>
+</fb:board>

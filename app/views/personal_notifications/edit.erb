@@ -1,0 +1,13 @@
+<h1>Editing personal_notification</h1>
+
+<% form_for(@personal_notification) do |f| %>
+  <%= f.error_messages %>
+
+ <%= render :partial => 'form', :locals => { :f => f }  %>
+
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', personal_notifications_path %>

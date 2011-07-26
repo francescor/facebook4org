@@ -1,0 +1,27 @@
+<h1>Visit description</h1>
+<br />
+Update your visit to <strong><%= @visit.organisation.short_name %></strong>
+
+
+<% form_for(@visit) do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :when, 'When' %><br />
+    <%= f.date_select :when, :order => [:month, :year],:start_year => Time.now.year-30, :end_year => Time.now.year #, :include_blank => true
+       %>
+  </p>
+
+  <p>
+    <%= f.label :description %> <small>(how long? reason?...)</small><br />
+    <%= f.text_field :description, :size => 40, :maxlength=> 60 %>
+  </p>
+
+  <p>
+    <%= f.submit 'Update' %> 
+    <%= link_to 'Remove', @visit, :confirm => 'Are you sure?', :method => :delete %>
+  </p>
+  <p>
+    <%= link_to 'Back to '+@visit.organisation.short_name, @visit.organisation %>
+  </p>
+<% end %>
+

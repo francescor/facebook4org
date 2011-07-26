@@ -1,0 +1,17 @@
+<h1>New Notification</h1>
+<br />
+Please note: <br />
+- once you create this way a notification for a specific user, you will also update the Dashboard counter of the specific user (and an email will be send to him according to the frequency of his notification preferences)! <br />
+- once you create a notification with no user, you will update the Dashboard counter of <b>all users</b> (and an email will be send to all users according to the frequency of their notification preferences)! <br />
+(more on the <a href ="http://wiki.developers.facebook.com/index.php/Dashboard_API#Understanding_the_Counter">Facebook Dashboard Counter</a> documentation)<br />
+<br />
+<% form_for(@notification) do |f| %>
+  <%= f.error_messages %>
+
+ <%= render :partial => 'form', :locals => { :f => f }  %>
+  <p>
+    <%= f.submit 'Create' %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', notifications_path %>

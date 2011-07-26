@@ -1,0 +1,223 @@
+We assume you are comfortable with Ruby and Rails and, of course, with the linux shell.
+Some git knowledge will help while dealing with the deploy in Heroku.
+
+
+== Download
+
+Be sure you have Ruby; Ruby on Rails and git installed
+(facebook4org was developed under ruby 1.8.7 and Rails 2.3.8)
+
+Download the code for facebook4org
+
+  git clone git://github.com/francescor/facebook4org.git
+
+If you don’t have git, the code can be downloaded from http://github.com/francescor/facebook4org/tarball/master
+
+
+== Install all necessary Rails plugins
+
+You need three plugins: facebooker (to deal with facebook), then geokit-rails and ym4r_gm for geo maps.
+
+Install facebooker http://github.com/mmangino/facebooker
+
+  cd facebook4org
+  script/plugin install git://github.com/mmangino/facebooker.git
+
+Install the GeoKit plugin http://geokit.rubyforge.org/api/geokit-rails/
+  
+  script/plugin install git://github.com/andre/geokit-rails.git
+
+Install the Ym4r plugin
+
+  ruby script/plugin install svn://rubyforge.org/var/svn/ym4r/Plugins/GM/trunk/ym4r_gm
+
+Now your vendor/plugins directory should have all three necessary plugins
+
+  vendor/plugins/facebooker
+  vendor/plugins/geokit-rails  
+  vendor/plugins/ym4r_gm
+
+
+== Create your Facebook application
+
+facebook4org run as a Facebook application: technically speaking if you call your application "my_facebook4org", your
+application web url will be:
+
+http://app.facebook.com/my_facebook4org
+
+but your application must be installed anyhow on a server (which will remain hidden to the end user).
+
+So, signup as a Facebook developer at http://developers.facebook.com
+
+Create a new Facebook application by going into http://www.facebook.com/developers/createapp.php or start from http://www.facebook.com/developers/apps.php
+
+Once you have created your app you need to update its settings.
+
+Go to your application settings, "Facebook Integration" menu and set:
+* the Canvas Page
+* set Canvas Type to FBML
+* Canvas URL (e.g. "http://**my_app**.heroku.com/" for Heroku)
+* set the Bookmark URL to the same url as the Canvas Page with "index" at the end
+
+
+== Setup facebooker 
+
+Now you must tell your installation all settings needed to communicate to facebook servers, so:
+
+Edit config/facebooker.yml (you may have also a look at config/facebooker.yml.EXAMPLE) 
+
+If you deploy on Heroku (see below) you need to fill also the production section
+
+
+== Setup gmaps api key
+
+To be able to see google maps of your users, you must edit config/gmaps_api_key.yml by adding your gmaps api key.
+The key is free, but you must get your key from google
+
+Get your key at http://code.google.com/intl/it/apis/maps/signup.html
+
+While getting this key please note that, as the site URL, you must set your server url (not the facebook app url).  I.e. for Heroku will be
+
+With Heroku this address will be something like:
+
+  http://**my_app**.heroku.com
+
+
+== Deploy on heroku
+
+You can, of course, install your application in any web server.   Here we'll use Heroku http://heroku.com as an example, so the following are 
+commands necessary only if you want to deploy on Heroku.
+
+I strongly advice you to use Heroku which is very fast in running and setting up.  Heroku is totally free if your
+database is smaller then 5MB.  An empty facebook4org installation is about 400KB, then each new user will be less then 3KB, so
+with 1000 users the database will probably be around 3500KB, so you would still be eligible for free Heroku account.
+The good about Heroku is scalability: you will see that speed is very important on any facebook app: especially when
+it gets popular: with heroku speed is at your fingers (just need to pay, of course).
+
+For details on how Heroku words see http://docs.heroku.com/quickstart
+
+Signup for an heroku account at http://heroku.com
+
+Install heroku gem
+
+  sudo gem install heroku
+
+Create your heroku empty app (rename '**my_app**' with something else: anything goes, since this domain will be hidden)
+
+  cd facebook4org
+  # the following is necessary to get rid of eventual .gitignore that will mess up Heroku
+  rm .gitignore
+  git rm .gitignore
+  # in the following rename '**my_app**' with something else (anything goes, since this domain will be hidden)
+  heroku create **my_app** 
+
+This way at http://**my_app**.heroku.com you should see "Welcome to your new app!"
+
+Then refresh your local git repository
+
+  # commit to include everything
+  git add .
+  git commit -am "added my modification"
+
+Now Publish your code (deploy) into heroku
+
+  git push heroku master
+
+Update your production section of config/facevbooker.yml with Heroku settings, in particular add
+
+  callback_url: http://**my_app**.heroku.com
+  app_key: the 'API Key' of your app
+  secret_key: the 'Application Secret' of your app
+  canvas_page_name: your app name in the canvas page (as to say the 'xxx' in http://apps.facebook.com/xxx)
+
+to config/facevbooker.yml (see facebooker help about this)
+Please note you don't need to fill the production section of config/database.yml since Heroku will take care of it.
+
+Then you push your modifications to Heroku
+
+  git add .
+  git commit -m "added my modification"
+  git push heroku master
+  # remember to restart the heroku server
+  heroku restart
+
+Now initialize the Heroku database
+
+  heroku rake db:migrate
+
+Now, if everything work well, by going to http://**my_app**.heroku.com you should be redirected to your canvas page
+http://apps.facebook.com/your_facebook_app_page
+
+== Post installation
+
+You may need to get the geo information of the organisations you've entered in the migration: see the admin page.
+
+
+=== Cron task
+
+To take advantage of the notifications features you must set the following cron jobs
+
+  # m h  dom mon dow   command
+  #
+  # facebook4org hourly = asap (check every hour)
+  10 * * * *   cd absolute_path_to_where_you_want_to_save_logs; curl -s http://**my_app**.heroku.com/cron/notify_by_email?notification_by_email_every=asap >> notification.log
+  # facebook4org daily (every day at 6:20am)
+  20 6 * * *   cd absolute_path_to_where_you_want_to_save_logs; curl -s http://**my_app**.heroku.com/cron/cron/notify_by_email?notification_by_email_every=day >> notification.log
+  # facebook4org weekly (every sunday = 0 morning)
+  30 6 * * 0   cd absolute_path_to_where_you_want_to_save_logs; curl -s http://**my_app**.heroku.com/cron/cron/notify_by_email?notification_by_email_every=week >> notification.log
+  # facebook4org monthly (every first day of a month, morning)
+  40 6 1 * *   cd absolute_path_to_where_you_want_to_save_logs; curl -s http://**my_app**.heroku.com/cron/cron/notify_by_email?notification_by_email_every=month >> notification.log
+
+This way users receive their notifications according to their preferences
+
+== Customization
+
+The main customization can be done by editing config/environment_peronal.rb file, edit the file according to your setup.
+
+
+== Users rights
+
+=== Administrators
+
+The first users who log in is forced to be automatically the administrator (is_admin flag set to true)
+Further administrators are easy added by their membership to a closed Facebook group you may create (set ADMIN_GROUP_GID).
+
+=== Normal users
+
+Once a users enter your facebook4org application they can sign-up, but before being able to see the data of other users
+they must be approved by one administrator (who receive a notification).
+
+== Development environment
+
+=== Create your development database
+
+Create your local development database; create your own database.yml
+
+  cp config/database.yml.EXAMPLE config/database.yml
+
+Edit your database.yml (keep in mind that for Heroku PostgreSQL you don't need the production section: heroku will take care of it)
+
+Create the database
+
+  rake db:create
+
+Add some initial organisations in 'add_testing_organisations' in db/migrate, if you dear
+
+=== tunnel
+
+Since facebook4org is a facebook application it's obvious you cannot run it without the internet (without availability of Facebook),
+but not only you need to access facebook server, facebook servers need to access your facebook4org installation!
+This means that if your development installation is in your laptop, its webserver must be accessible from the web.
+You can either open your http port to the world (bad) or use ssh tunneling for which facebooker has all prepared for you.
+
+What you need to do is fill up the "tunnel" section of config/facebooker.ylm
+
+It is all described in Michael Mangino's "Developing Facebook Platform Applications with Rails" at http://www.pragprog.com/titles/mmfacer/developing-facebook-platform-applications-with-rails
+
+
+== Issues
+
+MySql: in case you use MySql please update the db/migrate/create_sessions.rb file accordingly (see comments in it)
+this does not apply to Heroku database (PostgreSQL).
+
+

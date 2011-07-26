@@ -1,0 +1,53 @@
+
+<%= render :partial => 'menu' %>
+<br > 
+
+<p>This section of the <%= APPLICATION_LONG_NAME_WITH_STYLE %> will guide you through some networking suggestions
+  based on your <%= link_to 'preferences for exchanges', settings_url %>. </p>
+
+<br />
+
+<div class="menu">
+  <h3>My matches:</h3> 
+  <ul>
+    <li>
+      <%= link_to 'Same job area', url_for(:controller => 'matchmaker', :action => 'colleagues') %>
+      <div class="descrip">
+        Many people face the same issues in different organisations.  
+        Your <%= link_to 'colleagues', url_for(:controller => 'matchmaker', :action => 'colleagues') %> in <%= MAIN_ORG_NAME %>
+         not competing with you so they're the best people to share your experiences, difficulties and solutions with.
+      </div>
+    </li>
+    <li>
+      <%= link_to 'Connections by location', url_for(:controller => 'matchmaker', :action => 'connection_with_location') %>
+      <div class="descrip">
+        Are you going somewhere? To a meeting, a conference or just on a vacation?
+        You should look at all your  <%= link_to 'connections with a location',  url_for(:controller => 'matchmaker', :action => 'connection_with_location') %> for your
+        closest <%= MAIN_ORG_SHORT_NAME %> friends. You may also discover a nearby <%= MAIN_ORG_NAME %>
+        organisation to visit or a colleague to have a coffee with.
+      </div>
+    </li>
+    <li>
+      <%= link_to 'Where can you go?', url_for(:controller => 'matchmaker', :action => 'exchanges') %>
+      <div class="descrip">
+        Interested in work experience in another organisation? Look to see if there are some suggested <%= link_to 'exchanges', url_for(:controller => 'matchmaker', :action => 'exchanges') %> for you.
+      </div>
+    </li>
+    <li>
+      <%= link_to 'For your organisations', url_for(:controller => 'matchmaker', :action => 'for_your_organisation')  %>
+      <div class="descrip">
+        Is <%= @current_user.organisation.short_name.capitalize %> searching for volunteers/interns? discover some possibilities <%= link_to 'for your organisation', url_for(:controller => 'matchmaker', :action => 'for_your_organisation')  %>.
+      </div>
+    </li>
+  </ul>
+</div>
+
+<br />
+<br />
+<br />
+
+
+  <fb:comments xid="<%= controller.controller_name %>.<%= controller.action_name %>"
+                 publish_feed="false"
+                 send_notification_uid="<%= FACEBOOK_ID_OF_THE_FB_USER_WHO_WILL_RECEIVE_FB_COMMENTS_NOTIFICATION -%>">
+  </fb:comments>

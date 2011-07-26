@@ -1,0 +1,4 @@
+<% fb_tabs do %>
+  <%= fb_tab_item("Search for People",        search_url(:reset => 'all', :template => 'basic', :output => 'list', :show_quick_search => 'yes'), :selected => tab_selected?('search')) %>
+  <%= fb_tab_item("Search for Organisations", search_organisations_url(:template => 'basic', :output => 'list', :clear_session => true),                                   :selected => tab_selected?('search_organisations')) %>
+<% end %>

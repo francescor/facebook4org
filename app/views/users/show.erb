@@ -1,0 +1,382 @@
+
+
+    <%#= MAP %>
+    <br />
+    <br />
+    <table border="0">
+        <tbody>
+          <tr>
+            <td style ="width: 50%;"> 
+              <h1>
+                <%= fb_name(@user.uid, :capitalize => true, :linked => false) %>
+              </h1>
+              <%=  link_to @user.organisation.short_name, @user.organisation  %><br />
+              <%= display_eventual_pending_status_for_user(@user) %>
+              <%  if @user == @current_user %>
+                <small><%= link_to('update your settings', :controller => 'main', :action => 'settings') %></small>
+              <% end %>
+
+              <br />
+              <%= fb_profile_pic(@user.uid, :size => 'normal', :facebook_logo => true) %><br />
+              <%= render_view_photos(@user) %>
+              View <%= fb_name(@user.uid, :possessive => true, :firstnameonly => true) %> profile on Facebook<br />
+              <br />
+              <%= render_is_your_friend_or_add_as_friend(@user) %>
+              <%= render_send_message(@user) %>
+              <br />
+              Organisation: <%=  link_to @user.organisation.name, @user.organisation  %><br />
+
+              <% if @user.signup_step > 2 %>
+
+                <%= user_job(@user)%><br />
+                <%= user_location(@user)%><br />
+                Age: <%= @user.age_in_words %>
+                <% unless @user.birthday_day == 0 || @user.birthday_month == 0 %>
+                  birthday: <%= number_to_ordinal(@user.birthday_day) %> of <%= @user.birthday_month_in_words %>
+                <% end %>
+                <br />
+                <br />
+                <% unless  @user.email_privacy %>
+                  Email: <%= @user.email %><br /><br />
+                <% end %>
+                <% unless  @user.twitter.blank? %>
+                  <%= link_to (image_tag 'twitter_logo.jpg',   :alt=> 'Twitter' ), "http://twitter.com/#{@user.twitter}", :target => '_blank' %><br />
+                <% end %>
+                <% unless  @user.linkedin.blank? %>
+                  <%= link_to (image_tag 'linkedin_logo.png' , :alt=> 'LinkedIn'), "http://#{@user.linkedin}", :target => '_blank' %><br />
+                <% end %>
+                <br />
+                <h3>Preferences for exchanges:</h3>
+                <%= he_she(@user).capitalize -%> is interested in going in another organisation on exchange:<br />
+                &nbsp;&nbsp;<i>as a Worker:</i> <b><%= @user.go_as_worker_in_words %></b>  <br />
+                &nbsp;&nbsp;<i>as a Volunteer:</i> <b><%= @user.go_as_volunteer_in_words %></b> <br />
+                &nbsp;&nbsp;<i>as an Intern/training:</i> <b><%= @user.go_as_intern_in_words %></b> <br />
+                &nbsp;&nbsp;<i>for a short planning visit:</i> <b><%= @user.go_as_visitor_in_words %></b> <br />
+
+                <% unless @user.go_info.blank? %>
+                  Information <%= he_she(@user) -%> added about a possible exchange: <b><%= @user.go_info %></b><br />
+                <% end %>
+                <br />
+                Is <%= he_she(@user) -%> willing to host somebody in <%= his_her(@user) -%> home? <b><%=h @user.hosting_in_words %></b><br/>
+                <br/>
+                Can you contact <%= him_her(@user) -%> for information about <%= his_her(@user) %> city:<br/> <%= @user.city.capitalize %> (<%= @user.country %>)? <b><%=h @user.infopoint.capitalize %></b>
+                <% if @user.infopoint = 'yes' %>
+                  - <%= render_send_message(@user) %>
+                <% end %>
+                <br/>
+                <br/>
+            </td>
+            <td style = "text-align:right;" >
+              <% unless @user.lat == 0 || @user.lng == 0  %>
+                <fb:iframe src="<%= @url_for_iframe -%>" width="336" height="290" scrolling="no" >
+                </fb:iframe>
+              <% end %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <% unless @user.visits.empty? %>
+        <h3><%= fb_name(@user.uid, :possessive => true, :firstnameonly => true, :linked => false, :capitalize => true) %> visits: </h3>
+          <% @user.visits.sort_by {|visit| visit.when}.each do |visit| %>
+            <% if @user == @current_user %>
+              You were at <%= link_to visit.organisation.short_name, visit.organisation %> <%= link_to time_ago_in_words(visit.when)+' ago: '+visit.description.to_s,  {:controller => 'visits', :action => 'edit', :id => visit}, :title => 'Click to edit' %>
+            <% else %>
+              <%= he_she(@user).capitalize %> visited <%= link_to visit.organisation.short_name, visit.organisation %> <%= time_ago_in_words(visit.when) %>: <%= visit.description %>
+            <% end %>
+            <br />
+          <% end %>
+        <br />
+        <br />
+      <% end %>
+
+      <br />
+      <% unless @user.organisation_posts.empty? %>
+        <%= he_she(@user).capitalize %> has written the following posts for <%=  link_to @user.organisation.short_name, @user.organisation  %>: <br />
+        <ul style ="padding:3px 5px 5px;">
+          <% @user.organisation_posts.each do |organisation_post| %>
+          <li style ="list-style-position:inside; list-style-type:square;  padding:0 0 3px; ">
+            <%= link_to "#{organisation_post.category.capitalize} wanted: #{organisation_post.short_description}", organisation_post %> (created <%=h time_ago_in_words(organisation_post.updated_at) %> ago)<br />
+          </li>
+          <% end %>
+        </ul>
+        <br />
+      <% end %>
+
+
+<br />
+
+<p>
+
+<% unless  @user.inter_contacts.empty? %>
+  People with whom  <b><%= fb_name(@user.uid, :linked => false) %></b> has been in contact:<br />
+  <% @user.inter_contacts.sort_by {|contact| contact.when}.each do |contact| %>
+    <% if contact.user == @current_user || contact.contacted_user == @current_user %>
+      You,
+      <% if contact.when.to_time > Time.now()  %>
+        <%= link_to "[ERROR: you've set a date in the future! please correct]. Contact description: "+contact.description.to_s,  :controller => 'contacts', :action => 'edit', :id => contact %>
+      <% else %>
+        <%= link_to time_ago_in_words(contact.when)+' ago: '+contact.description.to_s,  {:controller => 'contacts', :action => 'edit', :id => contact}, :title => 'Click to edit' %>
+      <% end  %>
+      <br />
+      <% @new_contact_text = "I met #{him_her(@user)} again" %>
+    <% else %>
+      <% if contact.user == @user %>
+        <%= link_to fb_name(contact.contacted_user.uid, :linked => false, :capitalize => true),  contact.contacted_user %>, <%= time_ago_in_words(contact.when)+' ago: '+contact.description %>
+      <% else %>
+        <%= link_to fb_name(contact.user.uid, :linked => false, :capitalize => true),  contact.user %>, <%= time_ago_in_words(contact.when)+' ago: '+contact.description %>
+      <% end %>
+      <br />
+    <% end %>
+  <% end %>
+<% end %>
+</p>
+
+<% if @current_user != @user && @current_user.organisation != @user.organisation %>
+
+    <p>
+      <a id="I_met_him_button"
+         href="#"
+         clicktoshow="Contact_form"
+         clicktohide="I_met_him_button" >
+         <%= button_to @new_contact_text || "I met #{him_her(@user)}"  %>
+      </a>
+    </p>
+
+
+  <div id="Contact_form" style="display:none">
+    <% form_for(@contact) do |f| %>
+      <%= f.error_messages %>
+      <p>
+        <%= f.label :when, 'When' %><br />
+        <%= f.date_select :when, :order => [:day, :month, :year],:start_year => Time.now.year-30, :end_year => Time.now.year %>
+        <br />
+        <%= f.label :description %> <small>(how long? reason?...)</small><br />
+        <%= f.text_field :description, :size => 40, :maxlength=> 60 %>
+        <%= f.hidden_field :contacted_user_id, :value => @user.id %>
+        <br />
+        <%= f.submit 'Save' %>
+        <a id="hide_text"
+           href="#"
+           clicktohide="Contact_form"
+           clicktoshow="I_met_him_button">
+        Cancel
+        </a>
+
+      </p>
+    <% end %>
+  </div>
+
+<% end %>
+<br />
+
+
+  <!-- FRIENDS -->
+  <% if @current_user != @user %>
+    <h3>Friends:</h3>
+
+    <%= fb_name(@user.uid, :capitalize => true, :linked => false) -%>
+    <fb:if-is-friends-with-viewer uid="<%= @user.uid -%>" >
+      is your friend
+    <fb:else>
+      is not your friend
+    </fb:else>
+    </fb:if-is-friends-with-viewer>
+    <br />
+
+    <% if @friend_uids_in_common_with_current_user.size > 0 %>
+      <br />
+      <fb:if-is-friends-with-viewer uid="<%= @user.uid -%>" >
+        <b>Mutual friends:</b><br />
+      <fb:else>
+        <b>Even if <%= he_she(@user) %> is not your friend, these are your mutual friends:</b><br />
+      </fb:else>
+      </fb:if-is-friends-with-viewer>
+        (<%= @friend_uids_in_common_with_current_user.size %> friend<%= 's' if @friend_uids_in_common_with_current_user.size > 1 -%>  in common.
+        <a href="http://www.facebook.com/friends/?mutual&id=<%=  @user.uid-%>" target = "_blank" >View All Mutual Friends</a>)<br />
+        <% if @friend_uids_in_common_with_current_user_in_MM.size > 0 %>
+          <br />
+          In the  <%= APPLICATION_NAME_WITH_STYLE %>:<br/>
+          <br/>
+          <table border="0" cellpadding="10">
+            <tr>
+              <% @td = 1 %>
+              <% for friend_uid in @friend_uids_in_common_with_current_user_in_MM %>
+                <td>
+                  <% @friend = User.find_by_uid(friend_uid) %>
+                  <%= link_to fb_profile_pic(friend_uid, :linked => false, :size => 'square'), @friend %>
+                  <%= link_to (fb_name(friend_uid, :capitalize => true, :linked => false)), @friend %><br />
+                </td>
+                <% if @td == 4 %>
+                  <% @td = 1 %>
+                  </tr>
+                  <tr>
+                <% else %>
+                  <% @td += 1 %>
+                <% end %>
+              <% end %>
+            </tr>
+          </table>
+
+          <br />
+        <%  end %>
+        <% if @friend_uids_in_common_with_current_user_not_in_MM.size > 0 %>
+          Outsite the  <%= APPLICATION_NAME_WITH_STYLE %>:<br />
+          <br/>
+          <% for friend_uid in @friend_uids_in_common_with_current_user_not_in_MM %>
+            <%= fb_profile_pic(friend_uid, :facebook_logo => true, :size => "square") %>
+          <% end %>
+          <br />
+        <%  end %>
+    <% else %>
+      You don't have any friends in common with <%= him_her(@user) %>.<br />
+    <% end %>
+
+    <% if @friend_uids_in_common_with_current_user.size > 0 %>
+      <br />
+      <br/>
+      <b>Non Mutual Friends</b>:<br />
+      <br/>
+      <% if@friend_uids_in_MM_without_common.size > 0 %>
+        In the  <%= APPLICATION_NAME_WITH_STYLE %>:<br />
+        (these are the people <%= fb_name(@user.uid, :capitalize => true, :linked => false) %> is friend with, while you are not)<br/>
+          <br/>
+          <table border="0" cellpadding="10">
+            <tr>
+              <% @td = 1 %>
+              <% for friend_uid in @friend_uids_in_MM_without_common %>
+                <td>
+                  <% @friend = User.find_by_uid(friend_uid) %>
+                  <%= link_to fb_profile_pic(friend_uid, :linked => false, :size => 'square'), @friend %>
+                  <%= link_to (fb_name(friend_uid, :capitalize => true, :linked => false)), @friend %><br />
+                </td>
+                <% if @td == 4 %>
+                  <% @td = 1 %>
+                  </tr>
+                  <tr>
+                <% else %>
+                  <% @td += 1 %>
+                <% end %>
+              <% end %>
+            </tr>
+          </table>
+      <%  end %>
+      <br/>
+      <% if @friend_uids_not_in_MM_without_common.size > 0 %>
+        <br/>
+        <a id="show_text" href="#" clicktohide="show_text" clicktoshow="Friends,hide_text">
+          See all others <%= his_her(@user) %> facebook friends:<br />
+        </a>
+        <a id="hide_text" href="#" clicktohide="Friends, hide_text" clicktoshow="show_text" style="display:none">
+          Hide all others <%= his_her(@user) %> facebook friends:<br />
+        </a>
+        <br/>
+
+        <div id="Friends" style="display:none">
+          <% for friend_uid in  @friend_uids_not_in_MM_without_common.slice(0,MAX_FRIENDS_PIC_TO_SHOW) %>
+            <%= fb_profile_pic(friend_uid.to_s, :facebook_logo => true, :size => "square") %>
+          <% end %>
+          <%  if  @friend_uids_not_in_MM_without_common.size > MAX_FRIENDS_PIC_TO_SHOW %>
+          ... <a href="http://www.facebook.com/friends/?id=<%=  @user.uid-%>" target = "_blank" >View All</a>
+          <% end %>
+        </div>
+      <%  end %>
+    <% else %>
+    <% end %>
+    <br />
+    <br />
+  <% end %>
+
+  <br />
+
+  <!-- tolto codice -->
+ <h3>Directly from  <%= fb_name(@user.uid, :possessive => true, :linked => false) %> Facebook profile</h3>
+
+  <% if @current_user == @user %>
+   <small> (The profile you see here comes directly from your facebook: <b>only</b> user in the  <%= APPLICATION_NAME_WITH_STYLE %> <b>who are also your friend with you</b> will be able to see it)</small><br />
+  <% else %>
+    <fb:if-is-friends-with-viewer uid="<%= @user.uid -%>">
+      <small>Since <%= he_she(@user) %> is your friend, you can see some additional info about  <%= him_her(@user) %>.</small><br />
+      <a href="http://www.facebook.com/profile.php?v=info&id=<%=  @user.uid-%>" target = "_blank" ><%= his_her(@user).capitalize %> Info page</a><br />
+      <a href="http://www.facebook.com/profile.php?v=photos&id=<%=  @user.uid-%>" target = "_blank" ><%= his_her(@user).capitalize %> Photos</a><br />
+    <fb:else>
+      <small>(here you can see <%= fb_name(@user.uid, :capitalize => true, :possessive => true) -%> facebook info for non-friends -- it depends on <%= his_her(@user) %> privacy setting).</small><br />
+    </fb:else>
+    </fb:if-is-friends-with-viewer>
+  <% end %>
+  <br />
+
+
+  <% unless @app_user.nil? %>
+
+    <% @result = @app_user.hometown_location %>
+    <% unless @result.nil? %>
+      Hometown location: <%= h pretty_location(@result) %><br />
+    <% end %>
+
+    <% @result = @app_user.current_location %>
+    <% unless @result.nil? %>
+      Current location: <%= h pretty_location(@result) %><br />
+    <% end %>
+
+    <% for field in %w(meeting_for political quotes tv relationship_status about_me books music movies religion  birthday activities interests) %>
+      <% @result =  @app_user.send(field) %>
+      <% unless  @result.blank? %>
+        <%= field.capitalize %>: <%= h @result %><br />
+      <% end %>
+    <% end %>
+
+    <% @result = @app_user.education_history %>
+    <% if !@result.nil? && @result.size >0 %>
+      Education history: <br />
+      <% @result.each do |edu| %>
+      &nbsp;&nbsp;* <%= h edu.name %>, <%= h edu.concentrations %>, <%= h edu.degree %> (leaving year:<%= h edu.year %>)<br />
+      <% end %>
+    <% end %>
+
+    <% @result = @app_user.work_history %>
+    <% if !@result.nil? && @result.size >0 %>
+      Work history: <br />
+      <% @result.each do |work| %>
+        &nbsp;&nbsp;* Description:	<%= h work.description %><br />
+        &nbsp;&nbsp;&nbsp;     Position:	<%= h work.position %><br />
+        &nbsp;&nbsp;&nbsp;     Company_name:  <%= h work.company_name %><br />
+        &nbsp;&nbsp;&nbsp;     Location:      <%= h pretty_location(work.location) %><br />
+        &nbsp;&nbsp;&nbsp;     Start/ending date:      <%= h work.start_date %>/ <%= h work.end_date %>
+        <br />
+      <% end %>
+    <% end %>
+    <br />
+    <br />
+  <% end %>
+
+
+
+
+  <fb:if-can-see uid="<%= @user.uid -%>" what="statusupdates">
+    Last update in <%= fb_name(@user.uid, :possessive => true) -%> facebook wall (<a href="http://www.facebook.com/profile.php?v=wall&id=<%=  @user.uid-%>" target = "_blank" >See all</a>)<br />
+    <fb:wall>
+      <fb:wallpost uid="<%= @user.uid %>" >
+       <fb:user-status uid="<%= @user.uid -%>" linked="false"></fb:user-status>
+      </fb:wallpost>
+    </fb:wall>
+  <br />
+  </fb:if-can-see>
+
+
+  <h3>Comments</h3>
+  <small>All posts will be sent to <%= fb_name(@user.uid, :capitalize => true) %></small><br />
+  
+  <fb:comments xid="<%= 'users.show.'+@user.id.to_s -%>"
+               canpost="true"
+               <% if @current_user == @user || @current_user.is_admin %>
+                 candelete="true"
+               <% else %>
+                 candelete="false"
+               <% end %>
+               callbackurl='<%= url_for(:controller => "users", :only_path => false)+"/show/#{@user.id.to_s}" -%>'
+               send_notification_uid ="<%= @user.uid.to_s -%>"
+  </fb:comments>
+
+<% end %>
+

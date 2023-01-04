@@ -1,3 +1,5 @@
+NOTE: this is a very old project, totally not working of course due to Facebook changes in API/dev
+
 = <b>Facebook4org</b>
 === Facebook for organisations
 
